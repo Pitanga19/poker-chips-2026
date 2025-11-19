@@ -45,7 +45,6 @@ coverage.xml
 
 # Alembic
 alembic/versions/*.pyc
-alembic.ini
 
 # SQLite (local dev)
 *.sqlite
