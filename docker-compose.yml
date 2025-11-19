@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:17
+    container_name: pchips-db
+    restart: always
+    environment:
+      POSTGRES_USER: pchips
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: pchipsdb
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5450:5432'
