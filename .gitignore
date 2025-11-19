@@ -1,0 +1,139 @@
+# ============================================
+# PYTHON / FASTAPI
+# ============================================
+
+# Virtual environment
+venv/
+.env
+.env.*
+*.env
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packages
+build/
+dist/
+*.egg-info/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Logs
+*.log
+logs/
+debug.log
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+.coverage
+.cache/
+
+# MyPy / Pyright
+.mypy_cache/
+.pyright/
+.dmypy.json
+
+# Ruff
+.ruff_cache/
+
+# Alembic
+alembic/versions/*.pyc
+alembic.ini
+
+# SQLite (local dev)
+*.sqlite
+*.db
+
+
+# ============================================
+# DOCKER / POSTGRES
+# ============================================
+
+# ❗ Solo ignorar directorios de datos locales
+# (estos los crea Postgres dentro de tu máquina)
+postgres-data/
+pgdata/
+
+# ❗ Ignorar archivos temporales de docker
+*.pid
+*.log
+
+# 👍 NO IGNORAR:
+# docker-compose.yml
+# Dockerfile
+# config files necesarios
+
+
+# ============================================
+# REACT NATIVE / JAVASCRIPT
+# ============================================
+
+# Node modules
+node_modules/
+
+# Metro / React Native cache
+.expo/
+.expo-shared/
+.expo/*
+
+# Android build
+/android/.gradle
+/android/app/build
+/android/build
+/android/.idea
+/android/local.properties
+
+# iOS build
+/ios/Pods
+/ios/Podfile.lock
+/ios/build
+/ios/*.xccheckout
+/ios/*.xcworkspace
+/ios/*.xcodeproj/project.xcworkspace
+/ios/*.xcodeproj/xcuserdata
+
+# Misc JS
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Babel
+.babelrc
+.cache/
+metro-cache
+.watchmanconfig
+
+
+# ============================================
+# OS / IDE / GENERAL
+# ============================================
+
+# VSCode
+.vscode/
+
+# JetBrains / PyCharm
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+
+
+# ============================================
+# END
+# ============================================
