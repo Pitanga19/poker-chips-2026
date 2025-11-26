@@ -5,7 +5,7 @@ from app.db.base import Base
 
 # Motor asíncrono de SQLAlchemy
 engine = create_async_engine(
-    settings.DATABASE_URL,
+    settings.DATABASE_URL_ASYNC,
     echo=True,
 )
 
