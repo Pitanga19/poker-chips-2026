@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import settings as sett
 from app.db import base
+from app.core.config import settings as sett
 from app.core.exceptions import register_custom_exceptions
+from app.core.api import routers
 
 app = FastAPI(title=sett.PROJECT_NAME, version=sett.PROJECT_VERSION)
 
@@ -19,3 +20,6 @@ register_custom_exceptions(app)
 @app.get('/', tags=['Home'])
 def root():
     return {'msg': 'Hola poker'}
+
+for router in routers:
+    app.include_router(router)
