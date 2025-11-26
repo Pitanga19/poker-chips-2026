@@ -61,6 +61,11 @@ async def get_validated(
     
     return obj
 
+def update_fields(obj, data: dict):
+    for key, value in data.items():
+        if value is not None:     # evita sobreescribir con None
+            setattr(obj, key, value)
+
 # Eliminar un objeto de la db
 async def delete(obj: T, db: AsyncSession) -> None:
     await db.delete(obj)
