@@ -16,9 +16,3 @@ class RoomRead(RoomBase):
 
 class RoomOptional(BaseModel):
     hoster_id: Annotated[Optional[int], Field(gt=0)] = None
-
-class RoomInDB(RoomRead):
-    pass
-
-class RoomOut(RoomRead):
-    pass

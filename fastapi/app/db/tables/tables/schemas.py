@@ -16,9 +16,3 @@ class TableRead(TableBase):
 
 class TableOptional(BaseModel):
     room_id: Annotated[Optional[int], Field(gt=0)] = None
-
-class TableInDB(TableRead):
-    pass
-
-class TableOut(TableRead):
-    pass

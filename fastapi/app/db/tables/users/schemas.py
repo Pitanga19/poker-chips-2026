@@ -20,6 +20,3 @@ class UserOptional(BaseModel):
 
 class UserInDB(UserRead):
     hashed_password: Annotated[str, Field(..., min_length=6, max_length=255)]
-
-class UserOut(UserRead):
-    pass
