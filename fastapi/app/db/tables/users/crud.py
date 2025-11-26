@@ -47,12 +47,12 @@ async def get_all(db: AsyncSession) -> List[User]:
 
 async def update(id: int, data: UserOptional, db: AsyncSession) -> User | None:
     user = await get_by_id(id, db)
-    
-    if data.username:
-        user.username = data.username
-    if data.password:
-        user.hashed_password = hash_password(data.password)
-    
+    updates = data.model_dump(exclude_unset=True)
+
+    if 'password' in updates:
+        updates['hashed_password'] = hash_password(updates.pop('password'))
+
+    utils.update_fields(user, updates)
     return await utils.commit_and_refresh(user, db)
 
 async def delete(id: int, db: AsyncSession) -> None:
