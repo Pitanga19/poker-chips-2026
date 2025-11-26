@@ -6,6 +6,10 @@ class Settings(BaseSettings):
     PROJECT_VERSION: str = '0.1.0'
     DATABASE_URL_ASYNC: str
     DATABASE_URL_SYNC: str
+    JWT_SECRET: str
+    JWT_ALGORITHM: str
+    JWT_EXPIRATION_MINUTES: int
+    JWT_TIMEZONE: str
 
     class Config:
         env_file = '.env'
