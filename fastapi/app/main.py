@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings as sett
 from app.db import base
+from app.core.exceptions import register_custom_exceptions
 
 app = FastAPI(title=sett.PROJECT_NAME, version=sett.PROJECT_VERSION)
 
@@ -12,6 +13,8 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+
+register_custom_exceptions(app)
 
 @app.get('/', tags=['Home'])
 def root():
