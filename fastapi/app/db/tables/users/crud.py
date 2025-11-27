@@ -1,60 +1,38 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
-from typing import List
-from app.db.utils import crud_helper as utils
+from sqlalchemy import select
+from app.db.utils import crud_helper as helper
+from app.db.utils.base_crud import BaseCRUD
 from app.db.tables.users.model import User
-from app.db.tables.users.schemas import *
+from app.db.tables.users.schemas import UserCreate, UserOptional
 from app.core.security import hash_password
 
-async def create(data: UserCreate, db: AsyncSession) -> User:
-    # Verificar si ya existe ...
-    should_exist = False
-    fields = [
-        ('username', data.username) # por username
-    ]
-    
-    for field, value in fields:
-        stmt = select(User).where(getattr(User, field) == value)
-        await utils.get_validated(
-            stmt,
-            should_exist,
-            search_fields=[utils.SearchField(field=field, value=value)],
+class UserCRUD(BaseCRUD[User, UserCreate, UserOptional]):
+    async def validate_create(self, data: UserCreate, db: AsyncSession):
+        # Verificar si username ya existe
+        await helper.get_validated(
+            stmt=select(User).where(User.username == data.username),
+            should_exist=False,
+            search_fields=[helper.SearchField(field='username', value=data.username)],
             db=db
         )
-    
-    user = User(
-        username=data.username,
-        hashed_password=hash_password(data.password),
-    )
-    
-    db.add(user)
-    return await utils.commit_and_refresh(user, db)
 
-async def get_by_id(id: int, db: AsyncSession) -> User | None:
-    stmt = select(User).where(User.id == id)
-    should_exist = True
-    search_fields = [utils.SearchField(field='id', value=id)]
-    return await utils.get_validated(stmt, should_exist, search_fields, db)
+    async def validate_update(self, id: int, data: UserOptional, db: AsyncSession):
+        # Si quiere cambiar username, verificar duplicado
+        if data.username:
+            await helper.get_validated(
+                stmt=select(User).where(User.username == data.username, User.id != id),
+                should_exist=False,
+                search_fields=[helper.SearchField(field='username', value=data.username)],
+                db=db
+            )
 
-async def get_by_username(username: str, db: AsyncSession) -> User | None:
-    stmt = select(User).where(User.username == username)
-    should_exist = True
-    search_fields = [utils.SearchField(field='username', value=username)]
-    return await utils.get_validated(stmt, should_exist, search_fields, db)
+    async def validate_common(self, data, db: AsyncSession) -> dict:
+        fields = data.model_dump(exclude_unset=True)
 
-async def get_all(db: AsyncSession) -> List[User]:
-    return await utils.get_all(User, db)
+        # Si modificó password, hashearla
+        if 'password' in fields:
+            fields['hashed_password'] = hash_password(fields.pop('password'))
 
-async def update(id: int, data: UserOptional, db: AsyncSession) -> User | None:
-    user = await get_by_id(id, db)
-    updates = data.model_dump(exclude_unset=True)
+        return fields
 
-    if 'password' in updates:
-        updates['hashed_password'] = hash_password(updates.pop('password'))
-
-    utils.update_fields(user, updates)
-    return await utils.commit_and_refresh(user, db)
-
-async def delete(id: int, db: AsyncSession) -> None:
-    user = await get_by_id(id, db)
-    await utils.delete(user, db)
+user_crud = UserCRUD(User, UserCreate, UserOptional)
