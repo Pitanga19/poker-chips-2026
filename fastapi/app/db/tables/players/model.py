@@ -1,10 +1,13 @@
-from sqlalchemy import Integer, ForeignKey
+from sqlalchemy import UniqueConstraint, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base_class import Base
 
 class Player(Base):
     __tablename__ = 'players'
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = (
+        UniqueConstraint('user_id', 'room_id', name='uq_user_room'),
+        {'extend_existing': True},
+    )
     
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(
