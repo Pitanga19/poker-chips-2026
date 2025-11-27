@@ -28,3 +28,4 @@ class Player(Base):
     # Relaciones
     user = relationship('User', back_populates='players')
     room = relationship('Room', back_populates='players')
+    seat = relationship('Seat', back_populates='player', uselist=False)

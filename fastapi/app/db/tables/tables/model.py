@@ -16,3 +16,4 @@ class Table(Base):
     
     # Relaciones
     room = relationship('Room', back_populates='tables')
+    seats = relationship('Seat', back_populates='table', cascade='all, delete')
