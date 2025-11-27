@@ -12,3 +12,4 @@ class User(Base):
 
     # Relaciones
     hosted_rooms = relationship('Room', back_populates='hoster', cascade='all, delete')
+    players = relationship('Player', back_populates='user', cascade='all, delete')
