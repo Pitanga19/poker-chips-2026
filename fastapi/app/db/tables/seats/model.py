@@ -1,4 +1,4 @@
-from sqlalchemy import UniqueConstraint, Integer, ForeignKey
+from sqlalchemy import UniqueConstraint, Integer, ForeignKey, Boolean
 from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base_class import Base
@@ -24,6 +24,7 @@ class Seat(Base):
         index=True,
         nullable=True
     )
+    vacate: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     position: Mapped[int] = mapped_column(Integer, nullable=False)
 
     # Relaciones
