@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, ForeignKey
+from sqlalchemy import Integer, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base_class import Base
 
@@ -13,6 +13,7 @@ class Room(Base):
         index=True,
         nullable=False
     )
+    code: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
     
     # Relaciones
     hoster = relationship('User', back_populates='hosted_rooms')
