@@ -4,7 +4,7 @@ from app.db.utils import crud_helper as helper
 from app.db.utils.base_crud import BaseCRUD
 from app.db.tables.users.model import User
 from app.db.tables.users.schemas import UserCreate, UserOptional
-from app.core.security import hash_password
+from app.modules.auth.security import hash_password
 
 class UserCRUD(BaseCRUD[User, UserCreate, UserOptional]):
     async def validate_create(self, data: UserCreate, db: AsyncSession):
