@@ -5,7 +5,7 @@ class SeatBase(BaseModel):
     table_id: Annotated[int, Field(..., gt=0)]
     player_id: Annotated[Optional[int], Field(gt=0)] = None
     vacate: Annotated[bool, Field()] = True
-    position: Annotated[int, Field(ge=0, le=11)]
+    position: Annotated[int, Field(ge=1, le=12)]
     model_config = {
         'from_attributes': True,
     }
@@ -17,7 +17,7 @@ class SeatOptional(BaseModel):
     table_id: Annotated[Optional[int], Field(gt=0)] = None
     player_id: Annotated[Optional[int], Field(gt=0)] = None
     vacate: Annotated[Optional[bool], Field()] = None
-    position: Annotated[Optional[int], Field(ge=0, le=11)] = None
+    position: Annotated[Optional[int], Field(ge=1, le=12)] = None
 
 class SeatRead(SeatBase):
     id: Annotated[int, Field(..., gt=0)]
