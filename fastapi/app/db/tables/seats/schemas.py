@@ -13,8 +13,8 @@ class SeatCreate(SeatBase):
     pass
 
 class SeatOptional(BaseModel):
-    table_id: Annotated[Optional[int], Field(..., gt=0)] = None
-    player_id: Annotated[Optional[int], Field(..., gt=0)] = None
+    table_id: Annotated[Optional[int], Field(gt=0)] = None
+    player_id: Annotated[Optional[int], Field(gt=0)] = None
     position: Annotated[Optional[int], Field(ge=0, le=11)] = None
 
 class SeatRead(SeatBase):
