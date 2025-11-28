@@ -25,16 +25,15 @@ class PlayerCRUD(BaseCRUD[Player, PlayerCreate, PlayerOptional]):
             ],
             db=db
         )
-        if user_in_room: raise ValidationException(
+        if len (user_in_room) > 0: raise ValidationException(
             f'El usuario con id {data.user_id} ya está en esa sala'
         )
 
     async def validate_update(self, id: int, data: PlayerOptional, db: AsyncSession):
         # Verificar si ese usuario ya está como player en esa room
-        if data.user_id or data.room_id:
+        if (data.user_id is not None) or (data.room_id is not None):
             raise ValidationException(
                 'No se puede modificar user_id o room_id de un player existente'
             )
-
 
 player_crud = PlayerCRUD(Player, PlayerCreate, PlayerOptional)
