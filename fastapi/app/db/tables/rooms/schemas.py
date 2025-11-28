@@ -9,7 +9,7 @@ class RoomBase(BaseModel):
     }
 
 class RoomCreate(RoomBase):
-    hoster_id:  Annotated[int, Field(..., gt=0)]
+    pass
 
 class RoomRead(RoomBase):
     id: Annotated[int, Field(..., gt=0)]
