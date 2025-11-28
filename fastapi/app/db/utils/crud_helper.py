@@ -3,7 +3,7 @@ from sqlalchemy.sql import Select
 from sqlalchemy import select
 from typing import TypeVar, List, Type, Optional
 from pydantic import BaseModel
-from app.core.exceptions import NotFoundException, AlreadyExistsException
+from app.core.exceptions import NotFoundException, AlreadyExistsException, ValidationException
 
 # Tipo genérico para los modelos
 T = TypeVar('T')
@@ -31,23 +31,24 @@ async def get_filtered(
     exclude_fields: Optional[List[SearchField]] = None
 ) -> List[T]:
     if not search_fields:
-        raise ValueError('Debe proporcionar al menos un campo para buscar.')
+        raise ValidationException('Debe proporcionar al menos un campo válido para buscar.')
 
     stmt = select(model)
 
     # Aplicar filtros AND
     for sf in search_fields:
-        if not hasattr(model, sf.field):
-            raise AttributeError(
-                f'El modelo {model.__name__} no tiene el campo "{sf.field}".'
+        field = sf.field.lower()
+        if not hasattr(model, field):
+            raise ValidationException(
+                f'El modelo {model.__name__} no tiene el campo "{field}".'
             )
-        stmt = stmt.where(getattr(model, sf.field) == sf.value)
+        stmt = stmt.where(getattr(model, field) == sf.value)
 
     # Aplicar exclusiones
     if exclude_fields:
         for ex in exclude_fields:
             if not hasattr(model, ex.field):
-                raise AttributeError(
+                raise ValidationException(
                     f'El modelo {model.__name__} no tiene el campo "{ex.field}".'
                 )
             stmt = stmt.where(getattr(model, ex.field) != ex.value)
