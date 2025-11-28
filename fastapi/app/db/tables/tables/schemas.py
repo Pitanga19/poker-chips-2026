@@ -9,7 +9,7 @@ class TableBase(BaseModel):
     }
 
 class TableCreate(TableBase):
-    room_id:  Annotated[int, Field(..., gt=0)]
+    pass
 
 class TableRead(TableBase):
     id: Annotated[int, Field(..., gt=0)]
