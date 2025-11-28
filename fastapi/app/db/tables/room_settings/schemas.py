@@ -2,7 +2,6 @@ from pydantic import BaseModel, Field
 from typing import Annotated, Optional
 
 class RoomSettingsBase(BaseModel):
-    room_id: Annotated[int, Field(..., gt=0)]
     use_default_buy_in: Annotated[bool, Field()] = False
     buy_in: Annotated[Optional[int], Field(gt=0)] = None
     big_blind: Annotated[int, Field(..., ge=2)]
@@ -14,6 +13,7 @@ class RoomSettingsBase(BaseModel):
     }
 
 class RoomSettingsCreate(RoomSettingsBase):
+    room_id: Annotated[int, Field(..., gt=0)]
     small_blind: Annotated[Optional[int], Field(ge=1)] = None
 
 class RoomSettingsOptional(BaseModel):
@@ -27,4 +27,5 @@ class RoomSettingsOptional(BaseModel):
 
 class RoomSettingsRead(RoomSettingsBase):
     id: Annotated[int, Field(..., gt=0)]
+    room_id: Annotated[int, Field(..., gt=0)]
     small_blind: Annotated[int, Field(..., ge=1)]
