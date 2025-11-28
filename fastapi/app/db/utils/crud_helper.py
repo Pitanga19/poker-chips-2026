@@ -11,7 +11,7 @@ T = TypeVar('T')
 # Tipo para campos de busqueda
 class SearchField(BaseModel):
     field: str
-    value: str | int
+    value: str | int | bool | None
 
 # Ejecutar consulta y obtener uno o ningún registro
 async def get_one_or_none(stmt: Select, db: AsyncSession) -> T | None:
@@ -55,7 +55,7 @@ async def get_filtered(
     return await get_many(stmt, db)
 
 # Ejecutar consulta y obtener todos los registros
-async def get_all(table: T, db: AsyncSession) -> list[T]:
+async def get_all(table: Type[T], db: AsyncSession) -> list[T]:
     stmt = select(table)
     return await get_many(stmt, db)
 
@@ -109,7 +109,7 @@ async def commit_and_refresh(obj: T, db: AsyncSession) -> T:
 def parse_search_fields(raw: str) -> List[SearchField]:
     """
     Recibe:
-        "name:juan,lastname:perez,age:20"
+        "name:juan,lastname:perez,age:20,vacate:true"
     Devuelve:
         [SearchField(field="name", value="juan"), ...]
     """
@@ -119,10 +119,18 @@ def parse_search_fields(raw: str) -> List[SearchField]:
         if ':' not in part:
             continue
         k, v = part.split(':', 1)
+        v_lower = v.lower()
 
-        # convertir números
-        if v.isdigit():
+        # convertir booleanos
+        if v_lower in ('true', 'false'):
+            v = v_lower == 'true'
+        # convertir None
+        elif v_lower == 'none':
+            v = None
+        # convertir enteros
+        elif v.isdigit():
             v = int(v)
+        # dejar como string por defecto
 
         sf_list.append(SearchField(field=k, value=v))
 
