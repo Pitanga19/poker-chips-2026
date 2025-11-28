@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import Select
 from sqlalchemy import select
-from typing import TypeVar, List, Type
+from typing import TypeVar, List, Type, Optional
 from pydantic import BaseModel
 from app.core.exceptions import NotFoundException, AlreadyExistsException
 
@@ -14,7 +14,7 @@ class SearchField(BaseModel):
     value: str | int | bool | None
 
 # Ejecutar consulta y obtener uno o ningún registro
-async def get_one_or_none(stmt: Select, db: AsyncSession) -> T | None:
+async def get_one_or_none(stmt: Select, db: AsyncSession) -> Optional[T]:
     result = await db.execute(stmt)
     return result.scalar_one_or_none()
 
@@ -28,7 +28,7 @@ async def get_filtered(
     model: Type[T],
     search_fields: List[SearchField],
     db: AsyncSession,
-    exclude_fields: List[SearchField] | None = None
+    exclude_fields: Optional[List[SearchField]] = None
 ) -> List[T]:
     if not search_fields:
         raise ValueError('Debe proporcionar al menos un campo para buscar.')

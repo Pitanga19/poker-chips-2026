@@ -50,10 +50,11 @@ class BaseCRUD(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     async def get_filtered(
         self,
         search_fields: List[helper.SearchField],
-        db: AsyncSession
+        db: AsyncSession,
+        exclude_fields: Optional[List[helper.SearchField]] = None
     ) -> List[ModelType]:
-        return await helper.get_filtered(self.model, search_fields, db)
-    
+        return await helper.get_filtered(self.model, search_fields, db, exclude_fields)
+
     async def get_all(self, db: AsyncSession) -> List[ModelType]:
         return await helper.get_all(self.model, db)
 
