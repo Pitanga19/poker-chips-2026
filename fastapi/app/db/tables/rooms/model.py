@@ -18,3 +18,4 @@ class Room(Base):
     hoster = relationship('User', back_populates='hosted_rooms')
     tables = relationship('Table', back_populates='room', cascade='all, delete')
     players = relationship('Player', back_populates='room', cascade='all, delete')
+    room_settings = relationship('RoomSettings', back_populates='room', uselist=False, cascade='all, delete')
