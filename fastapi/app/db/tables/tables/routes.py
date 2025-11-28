@@ -13,7 +13,7 @@ router = APIRouter(prefix='/tables',tags=['Tables'])
 async def create_table_endpoint(data: TableCreate, db: AsyncSession = Depends(get_db)):
     return await crud.create(data, db)
 
-@router.get('/by-id/{id}', response_model=Optional[TableRead])
+@router.get('/by-id/{id}', response_model=TableRead)
 async def get_by_id_endpoint(id: int, db: AsyncSession = Depends(get_db)):
     return await crud.get_by_id(id, db)
 
@@ -29,7 +29,7 @@ async def get_filtered_endpoint(
 async def get_all_endpoint(db: AsyncSession = Depends(get_db)):
     return await crud.get_all(db)
 
-@router.patch('/{id}', response_model=Optional[TableRead])
+@router.patch('/{id}', response_model=TableRead)
 async def update_endpoint(id: int, data: TableOptional, db: AsyncSession = Depends(get_db)):
     return await crud.update(id, data, db)
 

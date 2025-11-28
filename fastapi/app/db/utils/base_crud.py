@@ -39,7 +39,7 @@ class BaseCRUD(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         obj = self.model(**fields)
         return await helper.commit_and_refresh(obj, db)
 
-    async def get_by_id(self, id: int, db: AsyncSession) -> Optional[ModelType]:
+    async def get_by_id(self, id: int, db: AsyncSession) -> ModelType:
         return await helper.get_validated(
             stmt = select(self.model).filter_by(id=id),
             should_exist = True,

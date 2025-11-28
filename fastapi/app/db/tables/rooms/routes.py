@@ -13,7 +13,7 @@ router = APIRouter(prefix='/rooms',tags=['Rooms'])
 async def create_room_endpoint(data: RoomCreate, db: AsyncSession = Depends(get_db)):
     return await crud.create(data, db)
 
-@router.get('/by-id/{id}', response_model=Optional[RoomRead])
+@router.get('/by-id/{id}', response_model=RoomRead)
 async def get_by_id_endpoint(id: int, db: AsyncSession = Depends(get_db)):
     return await crud.get_by_id(id, db)
 
@@ -29,7 +29,7 @@ async def get_filtered_endpoint(
 async def get_all_endpoint(db: AsyncSession = Depends(get_db)):
     return await crud.get_all(db)
 
-@router.patch('/{id}', response_model=Optional[RoomRead])
+@router.patch('/{id}', response_model=RoomRead)
 async def update_endpoint(id: int, data: RoomOptional, db: AsyncSession = Depends(get_db)):
     return await crud.update(id, data, db)
 
