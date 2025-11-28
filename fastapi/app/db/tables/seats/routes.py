@@ -36,4 +36,4 @@ async def update_endpoint(id: int, data: SeatOptional, db: AsyncSession = Depend
 @router.delete('/{id}', response_model=DeleteResponse)
 async def delete_endpoint(id: int, db: AsyncSession = Depends(get_db)):
     await crud.delete(id, db)
-    return {'msg': 'Jugador eliminado correctamente'}
+    return {'msg': 'Asiento eliminado correctamente'}
