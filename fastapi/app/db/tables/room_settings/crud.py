@@ -26,12 +26,12 @@ class RoomSettingsCRUD(BaseCRUD[RoomSettings, RoomSettingsCreate, RoomSettingsOp
                 f'La sala con id {data.room_id} ya tiene settings configurados'
             )
         
-        # Calcular valor de small_blind
-        data.small_blind = data.big_blind // 2
+        # Calcular valor de small_blind_value
+        data.small_blind_value = data.big_blind_value // 2
 
         # Aplicar validaciones
         self._validate_buy_in_logic(data.use_default_buy_in, data.buy_in)
-        self._validate_blinds(data.small_blind, data.big_blind)
+        self._validate_blinds_values(data.small_blind_value, data.big_blind_value)
         self._validate_stack(data.min_stack_bb, data.max_stack_bb)
 
     async def validate_update(self, id: int, data: RoomSettingsOptional, db):
@@ -42,9 +42,9 @@ class RoomSettingsCRUD(BaseCRUD[RoomSettings, RoomSettingsCreate, RoomSettingsOp
         if data.room_id is not None:
             raise ValidationException('No se puede modificar room_id de una configuración')
 
-        # Evitar modificar small_blind directamente
-        if data.small_blind is not None:
-            raise ValidationException('No se puede modificar la small_blind directamente')
+        # Evitar modificar small_blind_value directamente
+        if data.small_blind_value is not None:
+            raise ValidationException('No se puede modificar la small_blind_value directamente')
 
         # Resolver valores finales (mezcla de actuales + enviados)
         use_default = (
@@ -64,16 +64,16 @@ class RoomSettingsCRUD(BaseCRUD[RoomSettings, RoomSettingsCreate, RoomSettingsOp
             data.buy_in = None
             buy_in_value = None
         
-        big = data.big_blind if data.big_blind is not None else settings.big_blind
+        big = data.big_blind_value if data.big_blind_value is not None else settings.big_blind_value
         small = big // 2
-        data.small_blind = small
+        data.small_blind_value = small
 
         min_stack = data.min_stack_bb if data.min_stack_bb is not None else settings.min_stack_bb
         max_stack = data.max_stack_bb if data.max_stack_bb is not None else settings.max_stack_bb
 
         # Aplicar validaciones
         self._validate_buy_in_logic(use_default, buy_in_value)
-        self._validate_blinds(small, big)
+        self._validate_blinds_values(small, big)
         self._validate_stack(min_stack, max_stack)
 
     # Verificar coherencia de buy-in
@@ -94,18 +94,18 @@ class RoomSettingsCRUD(BaseCRUD[RoomSettings, RoomSettingsCreate, RoomSettingsOp
                 )
     
         # Verificar valores de ciegas
-    def _validate_blinds(self, small: int | None, big: int | None):
+    def _validate_blinds_values(self, small: int | None, big: int | None):
         if small is not None:
             if small <= 0:
-                raise ValidationException('small_blind debe ser mayor que 0')
+                raise ValidationException('small_blind_value debe ser mayor que 0')
 
         if big is not None:
             if big < 2:
-                raise ValidationException('big_blind debe ser mayor o igual a 2')
+                raise ValidationException('big_blind_value debe ser mayor o igual a 2')
 
         if small is not None and big is not None:
             if big <= small:
-                raise ValidationException('big_blind debe ser mayor que small_blind')
+                raise ValidationException('big_blind_value debe ser mayor que small_blind_value')
 
     # Verificar consistencia de min/max stack
     def _validate_stack(self, min_stack: int | None, max_stack: int | None):
