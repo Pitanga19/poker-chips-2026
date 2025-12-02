@@ -1,11 +1,12 @@
 from __future__ import annotations
 from sqlalchemy import Integer, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import TYPE_CHECKING
+from typing import List, TYPE_CHECKING
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
     from app.db.tables.hands.model import Hand
+    from app.db.tables.pot_players.model import PotPlayer
 
 class Pot(Base):
     __tablename__ = 'pots'
@@ -24,3 +25,8 @@ class Pot(Base):
     
     # Relaciones
     hand: Mapped['Hand'] = relationship('Hand', back_populates='pots')
+    pot_players: Mapped[List['PotPlayer']] = relationship(
+        'PotPlayer',
+        back_populates='pot',
+        cascade='all, delete-orphan'
+    )
