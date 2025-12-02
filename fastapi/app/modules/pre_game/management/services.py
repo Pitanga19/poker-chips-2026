@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.exceptions import ValidationException
+from app.core.exceptions import ValidationException, UnauthorizedException
 from app.db.utils.crud_helper import SearchField
 from app.db.tables.rooms.crud import room_crud
 from app.db.tables.rooms.schemas import RoomCreate
@@ -225,7 +225,7 @@ async def _validate_room_hoster(hoster_id: int, room_id: int, db: AsyncSession):
     
     # Verificar que sea hoster de la sala
     if room.hoster_id != hoster_id:
-        raise ValidationException(f'Usuario {hoster_id} no es hoster de la sala {room_id}')
+        raise UnauthorizedException(f'Usuario {hoster_id} no es hoster de la sala {room_id}')
     return room
 
 async def _validate_table_room(table_id: int, room_id: int, db: AsyncSession):

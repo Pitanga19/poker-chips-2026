@@ -57,10 +57,11 @@ async def get_player_by_seat_id(
     try:
         seat: Seat = result.scalar_one()
     except NoResultFound:
-        raise NotFoundException(f'No se encontró un jugador en el asiento id {seat_id}')
+        raise NotFoundException(f'No se encontró el asiento id {seat_id}')
     
     if not seat.player:
-        raise ValidationException(f'No hay jugador en el asiento id {seat_id}')
+        raise NotFoundException(f'No hay jugador en el asiento id {seat_id}')
+    
     return PlayerOut.model_validate(seat.player)
 
 async def get_players_by_room_id(user_id: int, room_id: int, db: AsyncSession) -> List[PlayerOut]:
