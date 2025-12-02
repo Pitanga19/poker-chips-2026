@@ -1,8 +1,10 @@
 from __future__ import annotations
 from sqlalchemy import UniqueConstraint, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.dialects.postgresql import ENUM as SAEnum
 from typing import Optional, TYPE_CHECKING
 from app.db.base_class import Base
+from app.db.utils.enums import ActionType
 
 if TYPE_CHECKING:
     from app.db.tables.users.model import User
@@ -28,6 +30,12 @@ class Player(Base):
         ForeignKey('rooms.id', name='fk_player_room_id'),
         index=True,
         nullable=False
+    )
+    
+    # referencia al último tipo de acción (puede ser NULL si no actuó todavía)
+    last_action: Mapped[Optional[ActionType]] = mapped_column(
+        SAEnum(ActionType, name='action_type'),
+        nullable=True
     )
     
     # Datos dinámicos del jugador en esta room
