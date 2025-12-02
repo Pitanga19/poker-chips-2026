@@ -1,11 +1,12 @@
 from __future__ import annotations
 from sqlalchemy import Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, List, TYPE_CHECKING
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
     from app.db.tables.hands.model import Hand
+    from app.db.tables.turns.model import Turn
 
 class BetRound(Base):
     __tablename__ = 'bet_rounds'
@@ -23,6 +24,18 @@ class BetRound(Base):
     
     # posición (seat.position) del jugador que tiene el turno actualmente, null hasta que arranque
     current_turn_position: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    # FK a Turn actual (nullable)
+    current_turn_id: Mapped[Optional[int]] = mapped_column(
+        Integer,
+        ForeignKey('turns.id', name='fk_bet_round_current_turn_id'),
+        nullable=True
+    )
     
     # Relaciones
     hand: Mapped['Hand'] = relationship('Hand', back_populates='bet_rounds')
+    current_turn: Mapped[Optional['Turn']] = relationship('Turn', foreign_keys=[current_turn_id])
+    turns: Mapped[List['Turn']] = relationship(
+        'Turn',
+        back_populates='bet_round',
+        cascade='all, delete-orphan'
+    )
