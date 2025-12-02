@@ -32,6 +32,7 @@ class Player(Base):
     
     # Datos dinámicos del jugador en esta room
     stack: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    betting_stack: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     
     # Relaciones
     user: Mapped['User'] = relationship('User', back_populates='players')
