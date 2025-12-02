@@ -40,15 +40,23 @@ class Hand(Base):
     need_big_blind: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     
     # Relaciones
-    game: Mapped['Game'] = relationship('Game', back_populates='hands')
+    game: Mapped['Game'] = relationship(
+        'Game',
+        back_populates='hands',
+        foreign_keys=[game_id]
+    )
     bet_rounds: Mapped[List['BetRound']] = relationship(
         'BetRound',
         back_populates='hand',
+        foreign_keys='BetRound.hand_id',
+        primaryjoin='Hand.id==BetRound.hand_id',
         cascade='all, delete-orphan'
     )
     current_bet_round: Mapped[Optional['BetRound']] = relationship(
         'BetRound',
-        foreign_keys=[current_bet_round_id]
+        foreign_keys=[current_bet_round_id],
+        primaryjoin='Hand.current_bet_round_id==BetRound.id',
+        uselist=False
     )
     pots: Mapped[List['Pot']] = relationship(
         'Pot',

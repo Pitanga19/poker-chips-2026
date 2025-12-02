@@ -31,5 +31,10 @@ class Turn(Base):
     amount: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     
     # Relaciones
-    bet_round: Mapped['BetRound'] = relationship('BetRound', back_populates='turns')
+    bet_round: Mapped['BetRound'] = relationship(
+        'BetRound',
+        back_populates='turns',
+        foreign_keys=[bet_round_id],
+        primaryjoin='Turn.bet_round_id==BetRound.id'
+    )
     player: Mapped['Player'] = relationship('Player', back_populates='turns')

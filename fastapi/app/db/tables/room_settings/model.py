@@ -1,7 +1,11 @@
+from __future__ import annotations
 from sqlalchemy import Integer, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from app.db.base_class import Base
+
+if TYPE_CHECKING:
+    from app.db.tables.rooms.model import Room
 
 class RoomSettings(Base):
     __tablename__ = 'room_settings'

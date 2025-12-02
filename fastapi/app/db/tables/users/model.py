@@ -1,7 +1,12 @@
+from __future__ import annotations
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import List
+from typing import List, TYPE_CHECKING
 from app.db.base_class import Base
+
+if TYPE_CHECKING:
+    from app.db.tables.rooms.model import Room
+    from app.db.tables.players.model import Player
 
 class User(Base):
     __tablename__ = 'users'

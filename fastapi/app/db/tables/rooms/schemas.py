@@ -9,6 +9,7 @@ class RoomBase(BaseModel):
     }
 
 class RoomCreate(RoomBase):
+    code: Annotated[Optional[str], Field(min_length=4, max_length=4)] = None
     pass
 
 class RoomOptional(BaseModel):

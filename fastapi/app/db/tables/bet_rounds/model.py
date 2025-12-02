@@ -32,10 +32,22 @@ class BetRound(Base):
     )
     
     # Relaciones
-    hand: Mapped['Hand'] = relationship('Hand', back_populates='bet_rounds')
-    current_turn: Mapped[Optional['Turn']] = relationship('Turn', foreign_keys=[current_turn_id])
+    hand: Mapped['Hand'] = relationship(
+        'Hand',
+        back_populates='bet_rounds',
+        foreign_keys=[hand_id],
+        primaryjoin='BetRound.hand_id==Hand.id'
+    )
+    current_turn: Mapped[Optional['Turn']] = relationship(
+        'Turn',
+        foreign_keys=[current_turn_id],
+        primaryjoin='BetRound.current_turn_id==Turn.id',
+        uselist=False
+    )
     turns: Mapped[List['Turn']] = relationship(
         'Turn',
         back_populates='bet_round',
+        foreign_keys='Turn.bet_round_id',
+        primaryjoin='BetRound.id==Turn.bet_round_id',
         cascade='all, delete-orphan'
     )

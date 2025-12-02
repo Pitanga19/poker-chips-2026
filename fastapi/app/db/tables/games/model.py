@@ -34,7 +34,8 @@ class Game(Base):
     hands: Mapped[List['Hand']] = relationship(
         'Hand',
         back_populates='game',
-        cascade='all, delete-orphan'
+        cascade='all, delete-orphan',
+        foreign_keys='Hand.game_id'
     )
     current_hand: Mapped[Optional['Hand']] = relationship(
         'Hand',

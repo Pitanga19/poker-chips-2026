@@ -1,7 +1,12 @@
+from __future__ import annotations
 from sqlalchemy import UniqueConstraint, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from app.db.base_class import Base
+
+if TYPE_CHECKING:
+    from app.db.tables.tables.model import Table
+    from app.db.tables.players.model import Player
 
 class Seat(Base):
     __tablename__ = 'seats'

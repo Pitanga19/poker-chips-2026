@@ -14,7 +14,7 @@ class RoomSettingsBase(BaseModel):
 
 class RoomSettingsCreate(RoomSettingsBase):
     room_id: Annotated[int, Field(..., gt=0)]
-    small_blind_value: Annotated[int, Field(..., gt=0)]
+    small_blind_value: Annotated[Optional[int], Field(gt=0)] = None
 
 class RoomSettingsOptional(BaseModel):
     room_id: Annotated[Optional[int], Field(gt=0)] = None
