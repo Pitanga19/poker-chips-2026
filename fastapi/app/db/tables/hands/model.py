@@ -9,6 +9,7 @@ from app.db.tables.hands.schemas import HandStreet
 if TYPE_CHECKING:
     from app.db.tables.games.model import Game
     from app.db.tables.bet_rounds.model import BetRound
+    from app.db.tables.pots.model import Pot
 
 class Hand(Base):
     __tablename__ = 'hands'
@@ -48,4 +49,9 @@ class Hand(Base):
     current_bet_round: Mapped[Optional['BetRound']] = relationship(
         'BetRound',
         foreign_keys=[current_bet_round_id]
+    )
+    pots: Mapped[List['Pot']] = relationship(
+        'Pot',
+        back_populates='hand',
+        cascade='all, delete-orphan'
     )
