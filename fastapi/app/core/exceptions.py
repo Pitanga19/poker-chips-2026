@@ -25,6 +25,10 @@ class IncorrectPasswordException(CustomException):
 class InactiveUserException(CustomException):
     status_code = 401
 
+# Excepción de no autorizado
+class UnauthorizedException(CustomException):
+    status_code = 401
+
 # Excepción de valor no encontrado
 class NotFoundException(CustomException):
     status_code = 404
@@ -42,6 +46,7 @@ custom_exceptions: List[CustomException] = [
     CustomException,
     InvalidTokenException,
     IncorrectPasswordException,
+    UnauthorizedException,
     InactiveUserException,
     NotFoundException,
     AlreadyExistsException,
