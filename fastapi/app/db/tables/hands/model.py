@@ -2,12 +2,13 @@ from __future__ import annotations
 from sqlalchemy import Integer, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import ENUM as SAEnum
-from typing import TYPE_CHECKING
+from typing import Optional, List, TYPE_CHECKING
 from app.db.base_class import Base
 from app.db.tables.hands.schemas import HandStreet
 
 if TYPE_CHECKING:
     from app.db.tables.games.model import Game
+    from app.db.tables.bet_rounds.model import BetRound
 
 class Hand(Base):
     __tablename__ = 'hands'
@@ -21,10 +22,17 @@ class Hand(Base):
         nullable=False
     )
     
+    current_bet_round_id: Mapped[Optional[int]] = mapped_column(
+        Integer,
+        ForeignKey('bet_rounds.id', name='fk_hand_current_bet_round_id'),
+        index=True,
+        nullable=True
+    )
+    
     street: Mapped[HandStreet] = mapped_column(
         SAEnum(HandStreet, name='hand_street'),
         nullable=False,
-        default=HandStreet.PRE_FLOP,
+        default=HandStreet.PRE_FLOP
     )
     dealer_position: Mapped[int] = mapped_column(Integer, nullable=False)
     need_small_blind: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
@@ -32,3 +40,12 @@ class Hand(Base):
     
     # Relaciones
     game: Mapped['Game'] = relationship('Game', back_populates='hands')
+    bet_rounds: Mapped[List['BetRound']] = relationship(
+        'BetRound',
+        back_populates='hand',
+        cascade='all, delete-orphan'
+    )
+    current_bet_round: Mapped[Optional['BetRound']] = relationship(
+        'BetRound',
+        foreign_keys=[current_bet_round_id]
+    )

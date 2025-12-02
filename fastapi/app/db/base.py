@@ -7,3 +7,4 @@ from app.db.tables.seats.model import Seat
 from app.db.tables.room_settings.model import RoomSettings
 from app.db.tables.games.model import Game
 from app.db.tables.hands.model import Hand
+from app.db.tables.bet_rounds.model import BetRound
