@@ -12,5 +12,8 @@ class PotPlayerBase(BaseModel):
 class PotPlayerCreate(PotPlayerBase):
     pass
 
+class PotPlayerOptional(BaseModel):
+    pass
+
 class PotPlayerRead(PotPlayerBase):
     id: Annotated[int, Field(gt=0)]
