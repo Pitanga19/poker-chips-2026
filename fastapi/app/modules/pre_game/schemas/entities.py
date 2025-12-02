@@ -24,7 +24,7 @@ class TableOut(TableRead):
     seats: List[SeatOut] = Field(default_factory=list)
 
 class RoomSettingsOut(RoomSettingsRead):
-    # id, room_id, use_default_buy_in, buy_in, big_blind, small_blind, min_stack_bb, max_stack_bb
+    # id, room_id, use_default_buy_in, buy_in, big_blind_value, small_blind_value, min_stack_bb, max_stack_bb
     pass
 
 class RoomOut(RoomRead):

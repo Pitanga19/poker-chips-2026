@@ -120,7 +120,7 @@ async def join_table(
     player = await _get_player_in_room(user_id, table.room_id, db)
 
     # Verificar stack mínimo
-    min_stack_required = room_settings.min_stack_bb * room_settings.big_blind
+    min_stack_required = room_settings.min_stack_bb * room_settings.big_blind_value
     if player.stack < min_stack_required:
         raise ValidationException(f'Jugador {player.id} no dispone de stack mínimo para la mesa')
     
