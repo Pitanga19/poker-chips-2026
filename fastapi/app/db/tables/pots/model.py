@@ -7,6 +7,7 @@ from app.db.base_class import Base
 if TYPE_CHECKING:
     from app.db.tables.hands.model import Hand
     from app.db.tables.pot_players.model import PotPlayer
+    from app.db.tables.pot_winners.model import PotWinner
 
 class Pot(Base):
     __tablename__ = 'pots'
@@ -27,6 +28,11 @@ class Pot(Base):
     hand: Mapped['Hand'] = relationship('Hand', back_populates='pots')
     pot_players: Mapped[List['PotPlayer']] = relationship(
         'PotPlayer',
+        back_populates='pot',
+        cascade='all, delete-orphan'
+    )
+    pot_winners: Mapped[List['PotWinner']] = relationship(
+        'PotWinner',
         back_populates='pot',
         cascade='all, delete-orphan'
     )

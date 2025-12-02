@@ -11,3 +11,4 @@ from app.db.tables.bet_rounds.model import BetRound
 from app.db.tables.turns.model import Turn
 from app.db.tables.pots.model import Pot
 from app.db.tables.pot_players.model import PotPlayer
+from app.db.tables.pot_winners.model import PotWinner
