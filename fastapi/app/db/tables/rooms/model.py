@@ -14,7 +14,10 @@ class Room(Base):
     __table_args__ = {'extend_existing': True}
     id: Mapped[int] = mapped_column(primary_key=True)
     hoster_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey('users.id', name='fk_room_hoster_id'), index=True, nullable=False
+        Integer,
+        ForeignKey('users.id', name='fk_room_hoster_id', ondelete='CASCADE'),
+        index=True,
+        nullable=False
     )
     code: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
     
@@ -22,12 +25,12 @@ class Room(Base):
     hoster: Mapped['User'] = relationship('User', back_populates='hosted_rooms')
     tables: Mapped[List['Table']] = relationship(
         'Table', back_populates='room',
-        cascade='all, delete-orphan'
+        cascade='all, delete'
     )
     players: Mapped[List['Player']] = relationship(
         'Player', back_populates='room',
-        cascade='all, delete-orphan'
+        cascade='all, delete'
     )
     room_settings: Mapped[Optional['RoomSettings']] = relationship(
-        'RoomSettings', back_populates='room', uselist=False, cascade='all, delete-orphan'
+        'RoomSettings', back_populates='room', uselist=False, cascade='all, delete'
     )

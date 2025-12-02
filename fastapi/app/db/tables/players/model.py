@@ -22,13 +22,13 @@ class Player(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey('users.id', name='fk_player_user_id'),
+        ForeignKey('users.id', name='fk_player_user_id', ondelete='CASCADE'),
         index=True,
         nullable=False
     )
     room_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey('rooms.id', name='fk_player_room_id'),
+        ForeignKey('rooms.id', name='fk_player_room_id', ondelete='CASCADE'),
         index=True,
         nullable=False
     )
@@ -52,5 +52,5 @@ class Player(Base):
     turns: Mapped[List['Turn']] = relationship(
         'Turn',
         back_populates='player',
-        cascade='all, delete-orphan'
+        cascade='all, delete'
     )

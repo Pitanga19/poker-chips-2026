@@ -20,13 +20,13 @@ class PotPlayer(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     pot_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey('pots.id', name='fk_pot_player_pot_id'),
+        ForeignKey('pots.id', name='fk_pot_player_pot_id', ondelete='CASCADE'),
         index=True,
         nullable=False
     )
     player_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey('players.id', name='fk_pot_player_player_id'),
+        ForeignKey('players.id', name='fk_pot_player_player_id', ondelete='CASCADE'),
         index=True,
         nullable=False
     )

@@ -21,5 +21,5 @@ class User(Base):
         'Room', back_populates='hoster', cascade='all, delete'
     )
     players: Mapped[List['Player']] = relationship(
-        'Player', back_populates='user', cascade='all, delete-orphan'
+        'Player', back_populates='user', cascade='all, delete'
     )

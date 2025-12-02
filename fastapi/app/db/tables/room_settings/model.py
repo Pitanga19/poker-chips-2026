@@ -14,7 +14,7 @@ class RoomSettings(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     room_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey('rooms.id', name='fk_room_settings_room_id'),
+        ForeignKey('rooms.id', name='fk_room_settings_room_id', ondelete='CASCADE'),
         index=True,
         unique=True,
         nullable=False

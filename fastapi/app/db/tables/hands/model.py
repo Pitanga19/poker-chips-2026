@@ -18,14 +18,14 @@ class Hand(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     game_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey('games.id', name='fk_hand_game_id'),
+        ForeignKey('games.id', name='fk_hand_game_id', ondelete='CASCADE'),
         index=True,
         nullable=False
     )
     
     current_bet_round_id: Mapped[Optional[int]] = mapped_column(
         Integer,
-        ForeignKey('bet_rounds.id', name='fk_hand_current_bet_round_id'),
+        ForeignKey('bet_rounds.id', name='fk_hand_current_bet_round_id', ondelete='CASCADE'),
         index=True,
         nullable=True
     )
@@ -50,7 +50,7 @@ class Hand(Base):
         back_populates='hand',
         foreign_keys='BetRound.hand_id',
         primaryjoin='Hand.id==BetRound.hand_id',
-        cascade='all, delete-orphan'
+        cascade='all, delete'
     )
     current_bet_round: Mapped[Optional['BetRound']] = relationship(
         'BetRound',
@@ -61,5 +61,5 @@ class Hand(Base):
     pots: Mapped[List['Pot']] = relationship(
         'Pot',
         back_populates='hand',
-        cascade='all, delete-orphan'
+        cascade='all, delete'
     )

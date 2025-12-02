@@ -15,14 +15,14 @@ class Game(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     table_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey('tables.id', name='fk_game_table_id'),
+        ForeignKey('tables.id', name='fk_game_table_id', ondelete='CASCADE'),
         index=True,
         unique=True,
         nullable=False
     )
     current_hand_id: Mapped[Optional[int]] = mapped_column(
         Integer,
-        ForeignKey('hands.id', name='fk_game_current_hand_id'),
+        ForeignKey('hands.id', name='fk_game_current_hand_id', ondelete='CASCADE'),
         index=True,
         nullable=True
     )
@@ -34,7 +34,7 @@ class Game(Base):
     hands: Mapped[List['Hand']] = relationship(
         'Hand',
         back_populates='game',
-        cascade='all, delete-orphan',
+        cascade='all, delete',
         foreign_keys='Hand.game_id'
     )
     current_hand: Mapped[Optional['Hand']] = relationship(

@@ -16,7 +16,7 @@ class Pot(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     hand_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey('hands.id', name='fk_pot_hand_id'),
+        ForeignKey('hands.id', name='fk_pot_hand_id', ondelete='CASCADE'),
         index=True,
         nullable=False
     )
@@ -29,10 +29,10 @@ class Pot(Base):
     pot_players: Mapped[List['PotPlayer']] = relationship(
         'PotPlayer',
         back_populates='pot',
-        cascade='all, delete-orphan'
+        cascade='all, delete'
     )
     pot_winners: Mapped[List['PotWinner']] = relationship(
         'PotWinner',
         back_populates='pot',
-        cascade='all, delete-orphan'
+        cascade='all, delete'
     )

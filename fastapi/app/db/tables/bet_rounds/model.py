@@ -15,21 +15,20 @@ class BetRound(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     hand_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey('hands.id', name='fk_bet_round_hand_id'),
+        ForeignKey('hands.id', name='fk_bet_round_hand_id', ondelete='CASCADE'),
         index=True, nullable=False
     )
-    
-    current_max_bet: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
-    current_min_raise: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
-    
-    # posición (seat.position) del jugador que tiene el turno actualmente, null hasta que arranque
-    current_turn_position: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     # FK a Turn actual (nullable)
     current_turn_id: Mapped[Optional[int]] = mapped_column(
         Integer,
-        ForeignKey('turns.id', name='fk_bet_round_current_turn_id'),
+        ForeignKey('turns.id', name='fk_bet_round_current_turn_id', ondelete='CASCADE'),
         nullable=True
     )
+    # posición (seat.position) del jugador que tiene el turno actualmente, null hasta que arranque
+    current_turn_position: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    
+    current_max_bet: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    current_min_raise: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     
     # Relaciones
     hand: Mapped['Hand'] = relationship(
@@ -49,5 +48,5 @@ class BetRound(Base):
         back_populates='bet_round',
         foreign_keys='Turn.bet_round_id',
         primaryjoin='BetRound.id==Turn.bet_round_id',
-        cascade='all, delete-orphan'
+        cascade='all, delete'
     )

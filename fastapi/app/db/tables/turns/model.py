@@ -17,11 +17,14 @@ class Turn(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     bet_round_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey('bet_rounds.id', name='fk_turn_bet_round_id'),
-        index=True, nullable=False
+        ForeignKey('bet_rounds.id', name='fk_turn_bet_round_id', ondelete='CASCADE'),
+        index=True, nullable=False,
     )
     player_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey('players.id', name='fk_turn_player_id'), index=True, nullable=False
+        Integer,
+        ForeignKey('players.id', name='fk_turn_player_id', ondelete='CASCADE'),
+        index=True,
+        nullable=False
     )
     
     action: Mapped[ActionType] = mapped_column(

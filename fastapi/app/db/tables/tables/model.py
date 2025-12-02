@@ -15,7 +15,10 @@ class Table(Base):
     
     id: Mapped[int] = mapped_column(primary_key=True)
     room_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey('rooms.id', name='fk_table_room_id'), index=True, nullable=False
+        Integer,
+        ForeignKey('rooms.id', name='fk_table_room_id', ondelete='CASCADE'),
+        index=True,
+        nullable=False
     )
     
     # Relaciones
@@ -23,7 +26,7 @@ class Table(Base):
     seats: Mapped[List['Seat']] = relationship(
         'Seat',
         back_populates='table',
-        cascade='all, delete-orphan'
+        cascade='all, delete'
     )
     
     # relación 1:1 opcional con Game
