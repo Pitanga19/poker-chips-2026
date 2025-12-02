@@ -1,5 +1,6 @@
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import List
 from app.db.base_class import Base
 
 class User(Base):
@@ -9,7 +10,11 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
-
+    
     # Relaciones
-    hosted_rooms = relationship('Room', back_populates='hoster', cascade='all, delete')
-    players = relationship('Player', back_populates='user', cascade='all, delete')
+    hosted_rooms: Mapped[List['Room']] = relationship(
+        'Room', back_populates='hoster', cascade='all, delete'
+    )
+    players: Mapped[List['Player']] = relationship(
+        'Player', back_populates='user', cascade='all, delete-orphan'
+    )

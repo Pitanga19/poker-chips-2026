@@ -15,12 +15,15 @@ class RoomSettings(Base):
         unique=True,
         nullable=False
     )
+    
     use_default_buy_in: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     buy_in: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    
     big_blind_value: Mapped[int] = mapped_column(Integer, nullable=False)
     small_blind_value: Mapped[int] = mapped_column(Integer, nullable=False)
+    
     min_stack_bb: Mapped[int] = mapped_column(Integer, nullable=False)
     max_stack_bb: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-
+    
     # Relaciones
-    room = relationship('Room', back_populates='room_settings')
+    room: Mapped['Room'] = relationship('Room', back_populates='room_settings')
