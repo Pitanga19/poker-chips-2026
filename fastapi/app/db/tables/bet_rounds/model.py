@@ -18,12 +18,14 @@ class BetRound(Base):
         ForeignKey('hands.id', name='fk_bet_round_hand_id', ondelete='CASCADE'),
         index=True, nullable=False
     )
+    
     # FK a Turn actual (nullable)
-    current_turn_id: Mapped[Optional[int]] = mapped_column(
+    last_turn_id: Mapped[Optional[int]] = mapped_column(
         Integer,
-        ForeignKey('turns.id', name='fk_bet_round_current_turn_id', ondelete='CASCADE'),
+        ForeignKey('turns.id', name='fk_bet_round_last_turn_id'),
         nullable=True
     )
+    
     # posición (seat.position) del jugador que tiene el turno actualmente, null hasta que arranque
     current_turn_position: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     
@@ -37,10 +39,10 @@ class BetRound(Base):
         foreign_keys=[hand_id],
         primaryjoin='BetRound.hand_id==Hand.id'
     )
-    current_turn: Mapped[Optional['Turn']] = relationship(
+    last_turn: Mapped[Optional['Turn']] = relationship(
         'Turn',
-        foreign_keys=[current_turn_id],
-        primaryjoin='BetRound.current_turn_id==Turn.id',
+        foreign_keys=[last_turn_id],
+        primaryjoin='BetRound.last_turn_id==Turn.id',
         uselist=False
     )
     turns: Mapped[List['Turn']] = relationship(
