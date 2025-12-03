@@ -1,10 +1,11 @@
 from pydantic import BaseModel, Field
 from typing import Annotated, Optional
+from app.db.utils.enums import ActionType
 
 class TurnBase(BaseModel):
     bet_round_id: Annotated[int, Field(..., gt=0)]
     player_id: Annotated[int, Field(..., gt=0)]
-    action: Annotated[Optional[int], Field(gt=0)] = None
+    action: Annotated[ActionType, Field(...)]
     amount: Annotated[Optional[int], Field(ge=0)] = None
     
     model_config = {
@@ -17,7 +18,7 @@ class TurnCreate(TurnBase):
 class TurnOptional(BaseModel):
     bet_round_id: Annotated[Optional[int], Field(gt=0)] = None
     player_id: Annotated[Optional[int], Field(gt=0)] = None
-    action: Annotated[Optional[int], Field(gt=0)] = None
+    action: Annotated[Optional[ActionType], Field()] = None
     amount: Annotated[Optional[int], Field(ge=0)] = None
 
 class TurnRead(TurnBase):
