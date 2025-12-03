@@ -22,7 +22,7 @@ class Game(Base):
     )
     current_hand_id: Mapped[Optional[int]] = mapped_column(
         Integer,
-        ForeignKey('hands.id', name='fk_game_current_hand_id', ondelete='CASCADE'),
+        ForeignKey('hands.id', name='fk_game_current_hand_id'),
         index=True,
         nullable=True
     )

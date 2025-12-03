@@ -25,7 +25,7 @@ class Hand(Base):
     
     current_bet_round_id: Mapped[Optional[int]] = mapped_column(
         Integer,
-        ForeignKey('bet_rounds.id', name='fk_hand_current_bet_round_id', ondelete='CASCADE'),
+        ForeignKey('bet_rounds.id', name='fk_hand_current_bet_round_id'),
         index=True,
         nullable=True
     )
