@@ -22,6 +22,7 @@ class Pot(Base):
     )
     
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    is_current: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     size: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     
     # Relaciones
