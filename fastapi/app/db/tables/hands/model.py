@@ -31,7 +31,12 @@ class Hand(Base):
     )
     
     street: Mapped[HandStreet] = mapped_column(
-        SAEnum(HandStreet, name='hand_street'),
+        SAEnum(
+            HandStreet,
+            name='hand_street',
+            values_callable=lambda cls: [e.value for e in cls],
+            native_enum=False,
+        ),
         nullable=False,
         default=HandStreet.PRE_FLOP
     )

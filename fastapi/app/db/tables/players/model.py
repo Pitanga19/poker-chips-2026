@@ -35,7 +35,12 @@ class Player(Base):
     
     # referencia al último tipo de acción (puede ser NULL si no actuó todavía)
     last_action: Mapped[Optional[ActionType]] = mapped_column(
-        SAEnum(ActionType, name='action_type'),
+        SAEnum(
+            ActionType,
+            name='action_type',
+            values_callable=lambda cls: [e.value for e in cls],
+            native_enum=False,
+        ),
         nullable=True
     )
     

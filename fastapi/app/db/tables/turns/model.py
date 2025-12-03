@@ -28,7 +28,12 @@ class Turn(Base):
     )
     
     action: Mapped[ActionType] = mapped_column(
-        SAEnum(ActionType, name='action_type'),
+        SAEnum(
+            ActionType,
+            name='action_type',
+            values_callable=lambda cls: [e.value for e in cls],
+            native_enum=False,
+        ),
         nullable=False
     )
     amount: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
