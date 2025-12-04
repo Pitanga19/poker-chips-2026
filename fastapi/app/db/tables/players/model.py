@@ -1,5 +1,5 @@
 from __future__ import annotations
-from sqlalchemy import UniqueConstraint, Integer, ForeignKey
+from sqlalchemy import UniqueConstraint, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import ENUM as SAEnum
 from typing import Optional, List, TYPE_CHECKING
@@ -32,6 +32,7 @@ class Player(Base):
         index=True,
         nullable=False
     )
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False)
     
     # referencia al último tipo de acción (puede ser NULL si no actuó todavía)
     last_action: Mapped[Optional[ActionType]] = mapped_column(

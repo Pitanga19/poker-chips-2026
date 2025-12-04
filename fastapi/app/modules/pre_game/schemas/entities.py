@@ -12,7 +12,7 @@ class UserOut(UserRead):
     pass
 
 class PlayerOut(PlayerRead):
-    # id, user_id, room_id, stack
+    # id, user_id, room_id, is_active, last_action, stack, betting_stack
     user: UserOut
 
 class SeatOut(SeatRead):
