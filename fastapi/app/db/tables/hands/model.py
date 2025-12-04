@@ -1,5 +1,5 @@
 from __future__ import annotations
-from sqlalchemy import Integer, Boolean, ForeignKey
+from sqlalchemy import Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import ENUM as SAEnum
 from typing import Optional, List, TYPE_CHECKING
@@ -41,8 +41,6 @@ class Hand(Base):
         default=HandStreet.PRE_FLOP
     )
     dealer_position: Mapped[int] = mapped_column(Integer, nullable=False)
-    need_small_blind: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-    need_big_blind: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     
     # Relaciones
     game: Mapped['Game'] = relationship(

@@ -15,8 +15,6 @@ class HandBase(BaseModel):
     current_bet_round_id: Annotated[Optional[int], Field(gt=0)] = None
     street: HandStreet = HandStreet.PRE_FLOP
     dealer_position: Annotated[int, Field(ge=0, le=12)]
-    need_small_blind: bool = True
-    need_big_blind: bool = True
     
     model_config = {
         'from_attributes': True,
@@ -30,8 +28,6 @@ class HandOptional(BaseModel):
     current_bet_round_id: Annotated[Optional[int], Field(gt=0)] = None
     street: Optional[HandStreet] = None
     dealer_position: Annotated[Optional[int], Field(ge=0, le=12)] = None
-    need_small_blind: Optional[bool] = None
-    need_big_blind: Optional[bool] = None
 
 class HandRead(HandBase):
     id: Annotated[int, Field(gt=0)]
