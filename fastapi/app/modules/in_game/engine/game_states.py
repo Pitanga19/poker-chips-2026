@@ -5,6 +5,7 @@ from app.db.utils.enums import ActionType
 # Street: 'pre-flop', 'flop', 'turn', 'river', 'winner-selection', 'finished'
 from app.db.tables.hands.schemas import HandStreet
 from app.modules.in_game.engine.utils.position_utils import get_next_position
+from app.modules.in_game.engine.utils.log_types import ActionLogEntry
 
 @dataclass
 class PlayerState:
@@ -73,6 +74,9 @@ class GameState:
     pots: List[PotState]
     hand: HandState
     bet_round: BetRoundState
+    
+    action_logs: List[ActionLogEntry] = field(default_factory=list)
+    next_log_sequence: int = 1
     
     last_turn: Optional[TurnState] = None
     
