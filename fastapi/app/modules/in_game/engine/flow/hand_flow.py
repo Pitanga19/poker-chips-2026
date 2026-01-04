@@ -114,8 +114,10 @@ class HandFlow:
         NOTA: Cuando AUTO_WIN y SHOWDOWN diverjan, refactorizar con match
         """
         
-        # Obtener información de showdown para la UI
+        # Indicar street de selección de ganadores
+        game_state.hand.street = HandStreet.WINNER_SELECTION
         
+        # Obtener información de showdown para la UI
         showdown_info = ShowdownManager.get_showdown_info(game_state)
         
         # Si todos los pots tienen un solo jugador, la resolución es automática
