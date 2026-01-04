@@ -39,8 +39,13 @@ class BetRoundFlow:
             return BetRoundResult.FINISHED
         
         next_player = TurnStageFlow.get_next_player_to_act(game_state)
+        is_next_player_last_raiser = (
+            game_state.bet_round.has_voluntary_bet and
+            next_player is not None and
+            game_state.bet_round.last_raiser_position == next_player.position
+        )
         
-        if next_player is None:
+        if next_player is None or is_next_player_last_raiser:
             game_state.bet_round.current_turn_position = None
             return BetRoundResult.FINISHED
         
