@@ -39,7 +39,11 @@ class ActionManager:
         if current_max_bet == 0:
             actions.append(ActionDescriptor(ActionType.CHECK))
             if player.stack >= big_blind_value:
-                actions.append(ActionDescriptor(ActionType.BET))
+                actions.append(ActionDescriptor(
+                    ActionType.BET,
+                    min_amount=big_blind_value,
+                    max_amount=player.stack,
+                ))
             actions.append(ActionDescriptor(ActionType.ALL_IN))
             return actions
         
