@@ -1,5 +1,6 @@
 from typing import Optional, List
-from app.modules.in_game.engine.game_states import GameState
+from app.db.tables.hands.schemas import HandStreet
+from app.modules.in_game.engine.game_states import GameState, PlayerState
 from app.modules.in_game.engine.flow.hand_flow import HandFlow
 from app.modules.in_game.engine.flow.bet_round_flow import BetRoundFlow
 from app.modules.in_game.engine.utils.enums import BetRoundResult, HandResult
@@ -20,6 +21,9 @@ class GameEngine:
     def __init__(self, game_state: GameState):
         self.state = game_state
     
+    def get_current_player(self) -> PlayerState:
+        return self.state.current_player
+    
     # HAND LIFECYCLE
     def start(self, dealer_position: Optional[int] = None) -> None:
         """Inicia una nueva mano"""
@@ -36,20 +40,14 @@ class GameEngine:
     def get_available_actions(self) -> List[ActionDescriptor]:
         return ActionManager.get_available_actions(self.state)
     
-    def action(self, action: ActionType, amount: Optional[int] = None) -> None:
+    def action(self, action: ActionType, amount: Optional[int] = None) -> BetRoundResult:
         """
         Ejecuta una acción del jugador actual y orquesta el flujo correspondiente
         """
-        bet_result = BetRoundFlow.after_action(self.state, action, amount)
-        
-        if bet_result == BetRoundResult.NEXT_TURN:
-            return
-        
-        # FIN DE BET ROUND
-        self._handle_bet_round_finish()
+        return BetRoundFlow.after_action(self.state, action, amount)
     
     # BET ROUND / HAND FLOW
-    def _handle_bet_round_finish(self) -> None:
+    def handle_bet_round_finish(self) -> None:
         BetRoundFlow.finish(self.state)
         hand_result = HandFlow.after_bet_round(self.state)
         
@@ -57,10 +55,10 @@ class GameEngine:
             case HandResult.NEXT_STREET:
                 self._next_street()
             
-            case HandResult.AUTO_WIN:
+            case HandResult.SHOWDOWN:
                 HandFlow.finish(self.state)
             
-            case HandResult.SHOWDOWN:
+            case HandResult.AUTO_WIN:
                 HandFlow.finish(self.state)
     
     def _next_street(self) -> None:
@@ -80,4 +78,9 @@ class GameEngine:
         Luego de esto, la mano queda finalizada
         y se puede llamar a next_hand().
         """
-        return ShowdownManager.resolve(self.state, pots_winners)
+        payout_descriptions = ShowdownManager.resolve(self.state, pots_winners)
+        
+        # Marcar mano como finalizada
+        self.state.hand.street = HandStreet.FINISHED
+        
+        return payout_descriptions
