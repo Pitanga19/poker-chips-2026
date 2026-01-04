@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict
+from uuid import UUID
 # Action: 'put-sb', 'put-bb', 'check', 'call', 'bet', 'raise', 'all-in', 'must-all-in', 'fold'
 from app.db.utils.enums import ActionType
 # Street: 'pre-flop', 'flop', 'turn', 'river', 'winner-selection', 'finished'
@@ -70,6 +71,7 @@ class HandState:
 
 @dataclass
 class GameState:
+    id: UUID
     players: List[PlayerState]
     pots: List[PotState]
     hand: HandState
