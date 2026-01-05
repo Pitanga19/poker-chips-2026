@@ -5,6 +5,8 @@ from app.core.exceptions import ValidationException
 from app.db.utils.enums import ActionType
 from app.modules.in_game.engine.game_states import GameState
 from app.modules.in_game.engine.utils.pot_utils import (
+    reset_pot_list,
+    add_can_act_players_to_pot,
     return_bet_chips,
     collect_to_pot,
     add_pot_to_list,
@@ -21,6 +23,16 @@ class PotManager:
     - recolectar betting_stack de cada jugador a los pots (incluye side-pots)
     - distribuir payouts a base de pot.pot_winners (lista de player ids por pot)
     """
+    
+    @staticmethod
+    def prepare_main_pot(game_state: GameState) -> None:
+        """
+        Preparar el pozo principal para iniciar una mano:
+        - Resetea la lista de pots
+        - Agrega los jugadores que pueden jugar al main pot
+        """
+        reset_pot_list(game_state.pots)
+        add_can_act_players_to_pot(game_state.pots[0], game_state.players)
     
     @staticmethod
     def collect_bets_into_pots(game_state: GameState) -> None:

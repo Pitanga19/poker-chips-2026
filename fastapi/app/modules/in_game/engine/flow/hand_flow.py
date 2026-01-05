@@ -4,10 +4,10 @@ from app.db.tables.hands.schemas import HandStreet
 from app.modules.in_game.engine.game_states import GameState
 from app.modules.in_game.engine.flow.bet_round_flow import BetRoundFlow
 from app.modules.in_game.engine.managers.action_manager import ActionManager
+from app.modules.in_game.engine.managers.pot_manager import PotManager
 from app.modules.in_game.engine.managers.showdown_manager import ShowdownManager, ShowdownPotWinners
 from app.modules.in_game.engine.utils.enums import HandResult
 from app.modules.in_game.engine.utils.player_reset import hand_players_reset
-from app.modules.in_game.engine.utils.pot_utils import add_can_act_players_to_pot
 from app.modules.in_game.engine.utils.hand_utils import (
     handle_dealer_selection,
     hand_state_reset,
@@ -61,7 +61,7 @@ class HandFlow:
         handle_dealer_selection(game_state.hand, dealer_position)
         
         # Agregar los jugadores que pueden actuar al main pot
-        add_can_act_players_to_pot(game_state.pots[0], game_state.players)
+        PotManager.prepare_main_pot(game_state)
         
         # Posteo de ciegas (no definido acá, solo llamado)
         ActionManager.post_blinds(game_state)
