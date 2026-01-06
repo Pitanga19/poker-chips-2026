@@ -204,14 +204,14 @@ class ActionManager:
                 f'La apuesta mínima es {big_blind_value}'
             )
         
+        bet_chips(player, amount)
+        player.last_action = ActionType.BET
+        
         bet_round.current_max_bet = amount
         bet_round.last_valid_bet = amount
         bet_round.last_raise_amount = amount
         bet_round.last_raiser_position = player.position
         bet_round.has_voluntary_bet = True
-        
-        bet_chips(player, amount)
-        player.last_action = ActionType.BET
         
         return player
     
@@ -232,14 +232,14 @@ class ActionManager:
                 f'La subida mínima es {total_min_raise}'
             )
         
+        bet_chips(player, player_to_raise_amount)
+        player.last_action = ActionType.RAISE
+        
         bet_round.current_max_bet = final_amount
         bet_round.last_valid_bet = final_amount
         bet_round.last_raise_amount = raise_amount
         bet_round.last_raiser_position = player.position
         bet_round.has_voluntary_bet = True
-        
-        bet_chips(player, player_to_raise_amount)
-        player.last_action = ActionType.RAISE
         
         return player
     
