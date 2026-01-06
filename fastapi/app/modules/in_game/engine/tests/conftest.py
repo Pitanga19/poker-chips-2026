@@ -1,4 +1,5 @@
 import pytest
+from uuid import uuid4
 from app.db.tables.hands.schemas import HandStreet
 from app.modules.in_game.engine.game_states import (
     GameState,
@@ -44,6 +45,7 @@ def base_pot():
 @pytest.fixture
 def game_state_3p(players_3_equal, base_hand, base_bet_round, base_pot):
     return GameState(
+        id=uuid4(),
         players=players_3_equal,
         pots=[base_pot],
         hand=base_hand,
@@ -53,6 +55,7 @@ def game_state_3p(players_3_equal, base_hand, base_bet_round, base_pot):
 @pytest.fixture
 def game_state_4p(players_4_varied, base_hand, base_bet_round, base_pot):
     return GameState(
+        id=uuid4(),
         players=players_4_varied,
         pots=[base_pot],
         hand=base_hand,
