@@ -52,6 +52,7 @@ class BetRoundResultView(BaseModel):
 
 # Esquemas para las solicitudes y respuestas de la API
 class GameStartRequest(BaseModel):
+    table_size: int = Field(..., description='Cantidad de asientos de la mesa')
     players: List[ToCreatePlayerInfo] = Field(
         ..., description='Lista de jugadores que participarán en la mano'
     )
@@ -64,6 +65,7 @@ class GameStartRequest(BaseModel):
 
 class GameStartResponse(BaseModel):
     game_id: UUID = Field(..., description='ID único del juego iniciado')
+    table_size: int = Field(..., description='Cantidad de asientos de la mesa')
     street: HandStreet = Field(..., description='Calle actual de la mano')
     dealer_id: int = Field(..., description='ID del jugador que es el dealer')
     small_blind_id: int = Field(..., description='ID del jugador que puso la ciega pequeña')

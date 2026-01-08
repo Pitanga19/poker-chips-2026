@@ -1,4 +1,5 @@
 from uuid import UUID, uuid4
+from app.core.exceptions import ValidationException
 from app.db.tables.hands.schemas import HandStreet
 from app.modules.in_game.engine.game_engine import GameEngine
 from app.modules.in_game.engine.game_repository import GameRepository
@@ -24,6 +25,11 @@ class GameService:
         """
         Inicia un nuevo juego con la configuración dada.
         """
+        if request.table_size < len(request.players):
+            raise ValidationException(
+                'No hay suficientes asientos en la mesa para todos los jugadores.'
+            )
+        
         game_id = uuid4()
         game_state = GameMapper.request_to_game_state(request, game_id)
         

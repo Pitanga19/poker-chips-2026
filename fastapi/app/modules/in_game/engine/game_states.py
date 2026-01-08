@@ -80,6 +80,7 @@ class HandState:
 @dataclass
 class GameState:
     id: UUID
+    table_size: int
     players: List[PlayerState]
     pots: List[PotState]
     hand: HandState

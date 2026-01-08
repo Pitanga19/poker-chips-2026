@@ -45,6 +45,7 @@ class GameMapper:
     
     @staticmethod
     def request_to_game_state(request: GameStartRequest, game_id: UUID) -> GameState:
+        table_size = request.table_size
         players = [
             PlayerState(
                 id=p.id,
@@ -73,6 +74,7 @@ class GameMapper:
         
         return GameState(
             id=game_id,
+            table_size=table_size,
             players=players,
             pots=[main_pot],
             hand=hand,
@@ -90,6 +92,7 @@ class GameMapper:
         
         return GameStartResponse(
             game_id=gs.id,
+            table_size=gs.table_size,
             street=gs.hand.street,
             dealer_id=dealer.id,
             small_blind_id=small_blind.id,
@@ -123,6 +126,7 @@ class GameMapper:
         
         return GameRenderResponse(
             game_id=gs.id,
+            table_size=gs.table_size,
             street=gs.hand.street,
             dealer_id=dealer.id,
             small_blind_id=small_blind.id,
