@@ -55,61 +55,57 @@ alembic/versions/*.pyc
 # DOCKER / POSTGRES
 # ============================================
 
-# ❗ Solo ignorar directorios de datos locales
-# (estos los crea Postgres dentro de tu máquina)
+# Local postgres volumes
 postgres-data/
 pgdata/
 
-# ❗ Ignorar archivos temporales de docker
+# Docker temp files
 *.pid
-*.log
 
-# 👍 NO IGNORAR:
+# ❗ NO ignorar:
 # docker-compose.yml
 # Dockerfile
 # config files necesarios
 
 
 # ============================================
-# REACT NATIVE / JAVASCRIPT
+# REACT NATIVE / EXPO / TYPESCRIPT
 # ============================================
 
-# Node modules
+# Dependencies
 node_modules/
 
-# Metro / React Native cache
+# Expo
 .expo/
 .expo-shared/
-.expo/*
+native/.expo/
 
-# Android build
-/android/.gradle
-/android/app/build
-/android/build
-/android/.idea
-/android/local.properties
+# Metro / bundler cache
+metro-cache/
+.watchmanconfig
 
-# iOS build
-/ios/Pods
-/ios/Podfile.lock
-/ios/build
-/ios/*.xccheckout
-/ios/*.xcworkspace
-/ios/*.xcodeproj/project.xcworkspace
-/ios/*.xcodeproj/xcuserdata
+# Android
+native/android/.gradle/
+native/android/app/build/
+native/android/build/
+native/android/.idea/
+native/android/local.properties
 
-# Misc JS
+# iOS
+native/ios/Pods/
+native/ios/build/
+native/ios/*.xccheckout
+native/ios/*.xcuserdata
+
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
-yarn.lock
 
-# Babel
-.babelrc
-.cache/
-metro-cache
-.watchmanconfig
+# ❗ Locks SÍ se versionan (no ignorar)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
 
 
 # ============================================
@@ -128,7 +124,7 @@ metro-cache
 # Windows
 Thumbs.db
 
-# Editor
+# Editor swap files
 *.swp
 *.swo
 
