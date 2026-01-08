@@ -89,6 +89,7 @@ class GameMapper:
                     position=p.position,
                     stack=p.stack,
                     betting_stack=p.betting_stack,
+                    is_active=p.is_active,
                 )
                 for p in gs.players
             ],
@@ -113,6 +114,7 @@ class GameMapper:
                 position=player.position,
                 stack=player.stack,
                 betting_stack=player.betting_stack,
+                is_active=player.is_active,
             )
         
         actions_views = [

@@ -38,6 +38,7 @@ class InGamePlayerInfo(ToCreatePlayerInfo):
     betting_stack: int = Field(
         ..., description='Cantidad apostada en la mano actual por el jugador'
     )
+    is_active: bool = Field(..., description='Indica si el jugador está activo en la mano')
 
 class BetRoundResultView(BaseModel):
     status: BetRoundResult = Field(..., description='Resultado después de realizar la acción')
