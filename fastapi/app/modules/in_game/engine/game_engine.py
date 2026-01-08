@@ -31,9 +31,10 @@ class GameEngine:
     
     def next_hand(self) -> None:
         """
-        Inicia la siguiente mano
-        Se asume que la mano actual ya fue finalizada
+        Inicia la siguiente mano verificando que la actual ya fue finalizada
         """
+        if self.state.hand.street != HandStreet.FINISHED:
+            raise ValueError('La mano actual no ha terminado')
         HandFlow.start(self.state)
     
     # PLAYER ACTIONS
