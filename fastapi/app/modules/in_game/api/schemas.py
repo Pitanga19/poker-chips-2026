@@ -74,6 +74,13 @@ class GameStartResponse(BaseModel):
     )
     pots: List[PotInfoView] = Field(..., description='Pots actuales en la mano')
 
+class GameRenderResponse(GameStartResponse):
+    waiting_for_action: bool = Field(..., description='Indica si se está esperando una acción')
+    is_showdown: bool = Field(..., description='Indica si se está en el showdown')
+    last_action: Optional[LastActionView] = Field(
+        None, description='Última acción realizada en la mano'
+    )
+
 class AvailableActionsResponse(BaseModel):
     player: InGamePlayerInfo = Field(..., description='Información del jugador actual')
     actions: List[ActionDescriptorView] = Field(

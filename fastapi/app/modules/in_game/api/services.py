@@ -8,6 +8,7 @@ from app.modules.in_game.api.schemas import (
     BetRoundResultView,
     GameStartRequest,
     GameStartResponse,
+    GameRenderResponse,
     AvailableActionsResponse,
     PlayerActionRequest,
     PlayerActionResponse,
@@ -31,6 +32,15 @@ class GameService:
         GameRepository.save(engine.state)
         
         return GameMapper.game_state_to_start_response(engine.state)
+    
+    @staticmethod
+    def get_game_state(game_id: UUID) -> GameRenderResponse:
+        """
+        Obtiene el estado completo para renderizar un juego
+        """
+        game_state = GameRepository.get(game_id)
+        
+        return GameMapper.game_state_to_render_response(game_state)
     
     @staticmethod
     def available_actions(game_id: UUID) -> AvailableActionsResponse:

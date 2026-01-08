@@ -11,12 +11,12 @@ from app.modules.in_game.api.schemas import (
     InGamePlayerInfo,
     GameStartRequest,
     GameStartResponse,
+    GameRenderResponse,
     ActionDescriptorView,
     AvailableActionsResponse,
     BetRoundResultView,
     PotInfoView,
     LastActionView,
-    PlayerActionRequest,
     PlayerActionResponse,
     ShowdownInfoResponse,
     PayoutDescriptionView,
@@ -107,6 +107,46 @@ class GameMapper:
                 )
                 for i, pot in enumerate(pots)
             ],
+        )
+    
+    @staticmethod
+    def game_state_to_render_response(gs: GameState) -> GameRenderResponse:
+        # Implementación para mapear GameState a GameRenderResponse
+        dealer = gs.players_by_position[gs.hand.dealer_position]
+        small_blind = gs.players_by_position[gs.hand.small_blind_position]
+        big_blind = gs.players_by_position[gs.hand.big_blind_position]
+        current_player = gs.current_player
+        pots = gs.pots
+        
+        last_turn = gs.last_turn
+        last_acting_player = gs.players_by_id[last_turn.player_id] if last_turn else None
+        
+        return GameRenderResponse(
+            game_id=gs.id,
+            street=gs.hand.street,
+            dealer_id=dealer.id,
+            small_blind_id=small_blind.id,
+            big_blind_id=big_blind.id,
+            current_player_id=current_player.id,
+            players=[
+                GameMapper._player_state_to_player_info(player)
+                for player in gs.players
+            ],
+            pots=[
+                PotInfoView(
+                    pot_index=i,
+                    pot_size=pot.size,
+                    players_in_pot=pot.players_in_pot,
+                )
+                for i, pot in enumerate(pots)
+            ],
+            waiting_for_action=gs.current_player is not None,
+            is_showdown=gs.hand.street == HandStreet.WINNER_SELECTION,
+            last_action=LastActionView(
+                player=GameMapper._player_state_to_player_info(last_acting_player),
+                action=last_turn.action,
+                amount=last_turn.amount,
+            ) if last_turn else None
         )
     
     @staticmethod

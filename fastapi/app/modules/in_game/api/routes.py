@@ -20,6 +20,10 @@ router = APIRouter(prefix='/sessions', tags=['Play'])
 def start_game_endpoint(request: GameStartRequest) -> GameStartResponse:
     return GameService.start(request)
 
+@router.get('/{game_id}/state', response_model=GameRenderResponse)
+def get_game_state_endpoint(game_id: UUID) -> GameRenderResponse:
+    return GameService.get_game_state(game_id)
+
 # Obtener acciones disponibles para el jugador actual
 @router.get('/{game_id}/actions', response_model=AvailableActionsResponse)
 def available_actions_endpoint(game_id: UUID) -> AvailableActionsResponse:
