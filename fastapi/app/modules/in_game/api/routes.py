@@ -4,6 +4,7 @@ from app.modules.in_game.api.services import GameService
 from app.modules.in_game.api.schemas import (
     GameStartRequest,
     GameStartResponse,
+    GameRenderResponse,
     AvailableActionsResponse,
     PlayerActionRequest,
     PlayerActionResponse,
@@ -12,10 +13,10 @@ from app.modules.in_game.api.schemas import (
     ShowdownResolveResponse,
 )
 
-router = APIRouter(prefix='/games', tags=['Games'])
+router = APIRouter(prefix='/sessions', tags=['Play'])
 
 # Iniciar un nuevo juego
-@router.post('/start', response_model=GameStartResponse, status_code=201)
+@router.post('', response_model=GameStartResponse, status_code=201)
 def start_game_endpoint(request: GameStartRequest) -> GameStartResponse:
     return GameService.start(request)
 
