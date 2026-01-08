@@ -51,11 +51,14 @@ class GameService:
         """
         game_state = GameRepository.get(game_id)
         engine = GameEngine(game_state)
+        acting_player_id = game_state.current_player.id
         prev_street = engine.state.hand.street
         next_available_actions = None
         
         status = engine.action(request.action, request.amount)
         GameRepository.save(engine.state)
+        
+        acting_player = engine.state.players_by_id[acting_player_id]
         
         if status == BetRoundResult.FINISHED:
             engine.handle_bet_round_finish()

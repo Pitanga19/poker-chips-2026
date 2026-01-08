@@ -15,6 +15,8 @@ from app.modules.in_game.api.schemas import (
     AvailableActionsResponse,
     BetRoundResultView,
     PotInfoView,
+    LastActionView,
+    PlayerActionRequest,
     PlayerActionResponse,
     ShowdownInfoResponse,
     PayoutDescriptionView,
@@ -30,6 +32,17 @@ from app.modules.in_game.engine.game_states import (
 )
 
 class GameMapper:
+    @staticmethod
+    def _player_state_to_player_info(player: PlayerState) -> InGamePlayerInfo:
+        return InGamePlayerInfo(
+            id=player.id,
+            username=player.username,
+            position=player.position,
+            stack=player.stack,
+            betting_stack=player.betting_stack,
+            is_active=player.is_active,
+        )
+    
     @staticmethod
     def request_to_game_state(request: GameStartRequest, game_id: UUID) -> GameState:
         players = [
@@ -83,15 +96,8 @@ class GameMapper:
             big_blind_id=big_blind.id,
             current_player_id=current_player.id,
             players=[
-                InGamePlayerInfo(
-                    id=p.id,
-                    username=p.username,
-                    position=p.position,
-                    stack=p.stack,
-                    betting_stack=p.betting_stack,
-                    is_active=p.is_active,
-                )
-                for p in gs.players
+                GameMapper._player_state_to_player_info(player)
+                for player in gs.players
             ],
             pots=[
                 PotInfoView(
@@ -108,14 +114,7 @@ class GameMapper:
         player: PlayerState,
         actions: List[ActionDescriptor],
     ) -> AvailableActionsResponse:
-        player_info = InGamePlayerInfo(
-                id=player.id,
-                username=player.username,
-                position=player.position,
-                stack=player.stack,
-                betting_stack=player.betting_stack,
-                is_active=player.is_active,
-            )
+        player_info = GameMapper._player_state_to_player_info(player)
         
         actions_views = [
             ActionDescriptorView(
@@ -137,6 +136,18 @@ class GameMapper:
         bet_round_result: BetRoundResultView,
         next_available_actions: Optional[AvailableActionsResponse] = None,
     ) -> PlayerActionResponse:
+        last_turn = game_state.last_turn
+        acting_player = game_state.players_by_id[last_turn.player_id]
+        player = GameMapper._player_state_to_player_info(acting_player)
+        action = last_turn.action
+        amount = last_turn.amount
+        
+        last_action = LastActionView(
+            player=player,
+            action=action,
+            amount=amount,
+        )
+        
         pots = [
             PotInfoView(
                 pot_index=i,
@@ -147,6 +158,7 @@ class GameMapper:
         ]
         return PlayerActionResponse(
             bet_round_result=bet_round_result,
+            last_action=last_action,
             pots=pots,
             next_available_actions=next_available_actions,
         )

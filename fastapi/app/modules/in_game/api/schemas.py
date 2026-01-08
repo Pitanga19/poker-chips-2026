@@ -40,6 +40,11 @@ class InGamePlayerInfo(ToCreatePlayerInfo):
     )
     is_active: bool = Field(..., description='Indica si el jugador está activo en la mano')
 
+class LastActionView(BaseModel):
+    player: InGamePlayerInfo = Field(..., description='Información del jugador que hizo la acción')
+    action: ActionType = Field(..., description='Tipo de acción realizada')
+    amount: Optional[int] = Field(None, description='Cantidad asociada a la acción, si aplica')
+
 class BetRoundResultView(BaseModel):
     status: BetRoundResult = Field(..., description='Resultado después de realizar la acción')
     prev_street: HandStreet = Field(..., description='Calle de la mano antes de la acción')
@@ -83,6 +88,7 @@ class PlayerActionResponse(BaseModel):
     bet_round_result: BetRoundResultView = Field(
         ..., description='Resultado de la ronda de apuestas tras la acción'
     )
+    last_action: LastActionView = Field(..., description='Última acción realizada en la mano')
     pots: List[PotInfoView] = Field(..., description='Pots actuales en la mano')
     next_available_actions: Optional[AvailableActionsResponse] = Field(
         default=None, description='Acciones disponibles después de realizar la acción'
