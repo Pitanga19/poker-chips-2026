@@ -22,12 +22,12 @@ def handle_dealer_selection(
         return
     
     if hand.dealer_position is None:
-        hand.dealer_position = get_random_position(hand.can_act_positions)
+        hand.dealer_position = get_random_position(hand.active_positions)
         return
     
     hand.dealer_position = get_next_position(
         hand.dealer_position,
-        hand.can_act_positions,
+        hand.active_positions,
     )
 
 def hand_state_reset(
@@ -38,4 +38,4 @@ def hand_state_reset(
     Resetea los valores del estado de la mano para iniciar una nueva
     """
     hand.street = HandStreet.PRE_FLOP
-    hand.can_act_positions = [p.position for p in players if p.can_act]
+    hand.active_positions = [p.position for p in players if p.is_active]

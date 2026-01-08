@@ -16,12 +16,20 @@ class PlayerState:
     stack: int # Saber si tiene para seguir jugando
     
     betting_stack: int = 0 # Comparar con current_max_bet
-    can_act: bool = True # Saber si hay que pedirle acción ('all-in', 'fold' -> can_act=False)
+    is_active: bool = True # Está activo en la mano actual
     last_action: Optional[ActionType] = None # Saber si está fold / all-in
     
     @property
     def total_stack(self) -> int:
         return self.stack + self.betting_stack
+    
+    @property
+    def can_act(self) -> bool:
+        return self.is_active and self.stack > 0
+    
+    @property
+    def has_act(self) -> bool:
+        return self.last_action is not None
 
 @dataclass
 class PotState:
@@ -54,20 +62,20 @@ class HandState:
     small_blind_value: int
     big_blind_value: int
     
-    can_act_positions: List[int] = field(default_factory=list) # Posiciones que juegan
+    active_positions: List[int] = field(default_factory=list) # Posiciones que juegan
     dealer_position: Optional[int] = None # Posición del dealer
     
     @property
     def small_blind_position(self) -> Optional[int]:
         if self.dealer_position is None:
             return None
-        return get_next_position(self.dealer_position, self.can_act_positions)
+        return get_next_position(self.dealer_position, self.active_positions)
     
     @property
     def big_blind_position(self) -> Optional[int]:
         if self.dealer_position is None:
             return None
-        return get_next_position(self.small_blind_position, self.can_act_positions)
+        return get_next_position(self.small_blind_position, self.active_positions)
 
 @dataclass
 class GameState:
@@ -93,9 +101,22 @@ class GameState:
         self.players_by_position = {p.position: p for p in self.players}
     
     @property
-    def current_player(self) -> PlayerState:
+    def current_player(self) -> Optional[PlayerState]:
         ctp = self.bet_round.current_turn_position
+        if ctp is None: return None
         return self.players_by_position[ctp]
+    
+    @property
+    def active_players(self) -> List[PlayerState]:
+        return [p for p in self.players if p.is_active]
+    
+    @property
+    def can_act_players(self) -> List[PlayerState]:
+        return [p for p in self.players if p.can_act]
+    
+    @property
+    def players_in_last_pot(self) -> List[PlayerState]:
+        return [p for p in self.players if p.id in self.pots[-1].players_in_pot]
     
     @property
     def to_call(self) -> int:

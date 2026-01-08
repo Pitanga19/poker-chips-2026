@@ -32,12 +32,12 @@ class GameMapper:
     def request_to_game_state(request: GameStartRequest, game_id: UUID) -> GameState:
         players = [
             PlayerState(
-                id=player.id,
-                username=player.username,
-                position=i,
-                stack=player.stack,
+                id=p.id,
+                username=p.username,
+                position=p.position,
+                stack=p.stack,
             )
-            for i, player in enumerate(request.players)
+            for p in request.players
         ]
         
         main_pot = PotState(
@@ -50,7 +50,7 @@ class GameMapper:
             street=HandStreet.PRE_FLOP,
             small_blind_value=request.small_blind_value,
             big_blind_value=request.big_blind_value,
-            can_act_positions=[p.position for p in players],
+            active_positions=[p.position for p in players],
             dealer_position=None,
         )
         

@@ -20,7 +20,7 @@ class ActionManager:
         """
         Asume que:
         - Existe current_player
-        - current_player.can_act == True
+        - current_player.is_active == True
         - El estado de bet_round es consistente
         - Todos los jugadores tienen al menos 1bb en su stack
         """
@@ -166,7 +166,7 @@ class ActionManager:
     def _fold(game_state: GameState) -> PlayerState:
         player = game_state.current_player
         
-        player.can_act = False
+        player.is_active = False
         player.last_action = ActionType.FOLD
         
         for pot in game_state.pots:
@@ -262,7 +262,6 @@ class ActionManager:
             bet_round.current_max_bet = total_bet
             bet_round.has_voluntary_bet = True
         
-        player.can_act = False
         bet_chips(player, player.stack)
         player.last_action = ActionType.ALL_IN
         
