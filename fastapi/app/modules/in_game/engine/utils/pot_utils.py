@@ -54,17 +54,14 @@ def collect_to_pot(
     players: List[PlayerState],
     pot: PotState,
     amount: Optional[int] = None,
-) -> List[PlayerState]:
+) -> None:
     """
     Recolecta fichas del betting_stack de cada jugador al pot
-    
-    - Si no se especifica amount, recolecta todo el betting_stack
-    - Retorna la lista de jugadores que aún tienen fichas en betting_stack
+    Si no se especifica amount, recolecta todo el betting_stack
     """
     for p in players:
         transfer_to_pot(p, pot, amount)
-    return [p for p in players if p.betting_stack > 0]
 
-def add_can_act_players_to_pot(pot: PotState, players: List[PlayerState]) -> None:
-    # Agrega los IDs de los jugadores que pueden actuar al pot.players_in_pot
-    pot.players_in_pot.extend([p.id for p in players if p.can_act])
+def add_active_players_to_pot(pot: PotState, players: List[PlayerState]) -> None:
+    # Agrega los IDs de los jugadores activos al pot.players_in_pot
+    pot.players_in_pot.extend([p.id for p in players if p.is_active])
