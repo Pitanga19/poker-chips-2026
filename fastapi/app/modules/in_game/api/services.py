@@ -72,9 +72,10 @@ class GameService:
             new_street=new_street,
         )
         
-        return PlayerActionResponse(
-            bet_round_result=bet_round_result,
-            next_available_actions=next_available_actions,
+        return GameMapper.request_to_player_action_response(
+            engine.state,
+            bet_round_result,
+            next_available_actions,
         )
     
     @staticmethod

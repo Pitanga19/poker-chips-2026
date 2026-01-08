@@ -15,7 +15,7 @@ class ActionDescriptorView(BaseModel):
         None, description='Cantidad máxima para la acción, si aplica'
     )
 
-class ShowdownPotInfoView(BaseModel):
+class PotInfoView(BaseModel):
     pot_index: int = Field(..., description='Índice del pot')
     pot_size: int = Field(..., description='Tamaño del pot')
     players_in_pot: List[int] = Field(..., description='IDs de los jugadores en el pot')
@@ -66,6 +66,7 @@ class GameStartResponse(BaseModel):
     players: List[InGamePlayerInfo] = Field(
         ..., description='Información de los jugadores en la mano'
     )
+    pots: List[PotInfoView] = Field(..., description='Pots actuales en la mano')
 
 class AvailableActionsResponse(BaseModel):
     player: InGamePlayerInfo = Field(..., description='Información del jugador actual')
@@ -81,12 +82,13 @@ class PlayerActionResponse(BaseModel):
     bet_round_result: BetRoundResultView = Field(
         ..., description='Resultado de la ronda de apuestas tras la acción'
     )
+    pots: List[PotInfoView] = Field(..., description='Pots actuales en la mano')
     next_available_actions: Optional[AvailableActionsResponse] = Field(
         default=None, description='Acciones disponibles después de realizar la acción'
     )
 
 class ShowdownInfoResponse(BaseModel):
-    pots_to_resolve: List[ShowdownPotInfoView] = Field(..., description='Pots a resolver')
+    pots_to_resolve: List[PotInfoView] = Field(..., description='Pots a resolver')
 
 class ShowdownResolveRequest(BaseModel):
     pots_winners: List[ShowdownPotWinnersView] = Field(

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 from app.db.tables.hands.schemas import HandStreet
 from app.modules.in_game.engine.managers.action_manager import ActionDescriptor
@@ -13,7 +13,9 @@ from app.modules.in_game.api.schemas import (
     GameStartResponse,
     ActionDescriptorView,
     AvailableActionsResponse,
-    ShowdownPotInfoView,
+    BetRoundResultView,
+    PotInfoView,
+    PlayerActionResponse,
     ShowdownInfoResponse,
     PayoutDescriptionView,
     ShowdownResolveRequest,
@@ -71,6 +73,7 @@ class GameMapper:
         small_blind = gs.players_by_position[gs.hand.small_blind_position]
         big_blind = gs.players_by_position[gs.hand.big_blind_position]
         current_player = gs.current_player
+        pots = gs.pots
         
         return GameStartResponse(
             game_id=gs.id,
@@ -88,6 +91,14 @@ class GameMapper:
                     betting_stack=p.betting_stack,
                 )
                 for p in gs.players
+            ],
+            pots=[
+                PotInfoView(
+                    pot_index=i,
+                    pot_size=pot.size,
+                    players_in_pot=pot.players_in_pot,
+                )
+                for i, pot in enumerate(pots)
             ],
         )
     
@@ -119,9 +130,29 @@ class GameMapper:
         )
     
     @staticmethod
+    def request_to_player_action_response(
+        game_state: GameState,
+        bet_round_result: BetRoundResultView,
+        next_available_actions: Optional[AvailableActionsResponse] = None,
+    ) -> PlayerActionResponse:
+        pots = [
+            PotInfoView(
+                pot_index=i,
+                pot_size=pot.size,
+                players_in_pot=pot.players_in_pot,
+            )
+            for i, pot in enumerate(game_state.pots)
+        ]
+        return PlayerActionResponse(
+            bet_round_result=bet_round_result,
+            pots=pots,
+            next_available_actions=next_available_actions,
+        )
+    
+    @staticmethod
     def showdown_pots_info_to_response(pots_info: List[ShowdownPotInfo]) -> ShowdownInfoResponse:
         pots_to_resolve = [
-            ShowdownPotInfoView(
+            PotInfoView(
                 pot_index=pot_info.pot_index,
                 pot_size=pot_info.pot_size,
                 players_in_pot=pot_info.players_in_pot,
