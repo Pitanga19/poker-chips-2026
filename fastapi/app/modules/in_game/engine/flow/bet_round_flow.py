@@ -35,18 +35,21 @@ class BetRoundFlow:
         ActionManager.apply_action(game_state, action, amount)
         
         if bet_round_finished(game_state):
-            game_state.bet_round.current_turn_position = None
             return BetRoundResult.FINISHED
         
         next_player = TurnStageFlow.get_next_player_to_act(game_state)
+        game_state.bet_round.current_turn_position = None
+        
+        if next_player is None:
+            return BetRoundResult.FINISHED
+        
         is_next_player_last_raiser = (
             game_state.bet_round.has_voluntary_bet and
             next_player is not None and
             game_state.bet_round.last_raiser_position == next_player.position
         )
         
-        if next_player is None or is_next_player_last_raiser:
-            game_state.bet_round.current_turn_position = None
+        if is_next_player_last_raiser:
             return BetRoundResult.FINISHED
         
         game_state.bet_round.current_turn_position = next_player.position
@@ -54,7 +57,7 @@ class BetRoundFlow:
     
     @staticmethod
     def finish(game_state: GameState) -> None:
-        # Primero recolecta las apuestas
+        # Recolectar apuestas
         PotManager.collect_bets_into_pots(game_state)
         
         # Por último los reset de valores de estado
