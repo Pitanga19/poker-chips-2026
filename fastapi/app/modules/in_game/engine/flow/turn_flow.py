@@ -24,7 +24,10 @@ class TurnStageFlow:
     
     @staticmethod
     def get_next_player_to_act(game_state: GameState) -> Optional[PlayerState]:
-        # Este método asume que la ronda está activa
+        """
+        Retorna el siguiente jugador en actuar
+        Retorna None si no hay siguiente jugador, se debe finalizar la ronda
+        """
         
         # Si current_player es None, es un error de flujo (no de usuario)
         if game_state.current_player is None:
@@ -33,12 +36,12 @@ class TurnStageFlow:
         cpp = game_state.current_player.position
         players = game_state.players
         
-        # Obtener posición del siguiente jugador en actuar
+        # Obtener posición del siguiente jugador que puede actuar
         ncap = get_next_can_act_position(cpp, players)
         
         # Si no queda nadie: fin de ronda
         if ncap is None:
             return None
         
-        # Retorna el siguiente jugador en actuar
+        # Retorna el siguiente jugador que puede actuar
         return game_state.players_by_position[ncap]

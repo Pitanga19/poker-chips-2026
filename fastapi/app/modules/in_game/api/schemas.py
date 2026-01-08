@@ -78,7 +78,9 @@ class PlayerActionRequest(BaseModel):
     amount: Optional[int] = Field(None, description='Cantidad asociada a la acción, si aplica')
 
 class PlayerActionResponse(BaseModel):
-    bet_round_result: BetRoundResultView = Field(..., description='Resultado de la ronda de apuestas tras la acción')
+    bet_round_result: BetRoundResultView = Field(
+        ..., description='Resultado de la ronda de apuestas tras la acción'
+    )
     next_available_actions: Optional[AvailableActionsResponse] = Field(
         default=None, description='Acciones disponibles después de realizar la acción'
     )

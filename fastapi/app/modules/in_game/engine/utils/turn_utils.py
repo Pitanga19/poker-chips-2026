@@ -33,6 +33,7 @@ def get_first_to_act_position(
 ) -> Optional[int]:
     """
     Obtiene la posición del primer jugador que debe actuar en la ronda actual
+    Si hay menos de dos jugadores activos devuelve None
     """
     if sum(1 for p in players if p.can_act) < 2:
         return None
@@ -80,9 +81,10 @@ def get_next_can_act_position(
     # Buscar circularmente desde la posición actual
     sorted_positions = sorted(can_act_positions)
     
+    # Obtener la primera mayor
     for pos in sorted_positions:
         if pos > current_position:
             return pos
     
-    # wrap around
+    # Si no se encuentra una mayor, reiniciar la vuelta
     return sorted_positions[0]
