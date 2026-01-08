@@ -5,9 +5,9 @@ from app.modules.in_game.engine.game_states import GameState
 from app.modules.in_game.engine.flow.bet_round_flow import BetRoundFlow
 from app.modules.in_game.engine.managers.action_manager import ActionManager
 from app.modules.in_game.engine.managers.pot_manager import PotManager
-from app.modules.in_game.engine.managers.showdown_manager import ShowdownManager, ShowdownPotWinners
 from app.modules.in_game.engine.utils.enums import HandResult
 from app.modules.in_game.engine.utils.player_reset import hand_players_reset
+from app.modules.in_game.engine.managers.showdown_manager import ShowdownManager
 from app.modules.in_game.engine.utils.hand_utils import (
     handle_dealer_selection,
     hand_state_reset,
@@ -41,7 +41,7 @@ class HandFlow:
         Dealer:
         - Si se recibe dealer_position → se usa (primera mano manual)
         - Si NO se recibe:
-            - Si no hay dealer previo → se elige uno al azar entre can_act
+            - Si no hay dealer previo → se elige uno al azar entre los jugadores activos
             - Si hay dealer previo → se avanza al siguiente elegible
         
         Flujo:
@@ -121,29 +121,4 @@ class HandFlow:
         showdown_info = ShowdownManager.get_showdown_info(game_state)
         
         # Si todos los pots tienen un solo jugador, la resolución es automática
-        auto_resolve = all(
-            len(info.players_in_pot) == 1 for info in showdown_info
-        )
-        
-        if auto_resolve:
-            showdown_pot_winners: List[ShowdownPotWinners] = []
-            # Seteo automático de ganadores
-            for i, info in enumerate(showdown_info):
-                pot = game_state.pots[i]
-                pot.pot_winners = info.players_in_pot
-                showdown_pot_winners.append(
-                    ShowdownPotWinners(pot_index=i, pot_winners_ids=info.players_in_pot)
-                )
-            
-            # Distribución directa
-            ShowdownManager.resolve(game_state, showdown_pot_winners)
-            return
-        
-        # Caso interactivo:
-        # La UI debe:
-        # 1. Mostrar showdown_info
-        # 2. Enviar winners por pot
-        #
-        # HandFlow NO continúa automáticamente desde acá
-        # Se espera una llamada explícita a ShowdownManager.resolve(...)
-        return
+        auto_resolve = all(len(info.players_in_pot) == 1 for info in showdown_info)
