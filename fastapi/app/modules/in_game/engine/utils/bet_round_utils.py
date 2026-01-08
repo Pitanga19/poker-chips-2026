@@ -13,38 +13,45 @@ def bet_round_state_reset(bet_round: BetRoundState) -> None:
 def bet_round_finished(game_state: GameState) -> bool:
     """
     Evaluar condiciones para terminar la ronda de apuestas actual
-    
-    - Todos los jugadores activos han igualado la apuesta máxima
-    - Todos los jugadores activos han checkeado (si la apuesta máxima es 0)
+    Se toma como referencia los jugadores que pueden actuar en el pot actual
+    - Todos los jugadores han checkeado (si la apuesta máxima es 0)
+    - Todos los jugadores han igualado la apuesta máxima
     - Queda 1 o ningún jugador activo
     """
-    active = [
-        p for p in game_state.players
-        if p.id in game_state.pots[-1].players_in_pot
-    ]
+    active_players = game_state.active_players
     
     # Terminar si queda 1 o ningún jugador activo
-    if len(active) <= 1:
+    if len(active_players) <= 1:
         return True
     
+    can_act_players = game_state.can_act_players
     max_bet = game_state.bet_round.current_max_bet
     
-    # Terminar si todos checkearon
+    # Si no hubo apuestas...
     if max_bet == 0:
-        everyone_checked = all(p.last_action == ActionType.CHECK for p in active)
-        return everyone_checked
+        # Evaluar que todos hayan actuado
+        everyone_has_act = all(p.has_act for p in can_act_players)
+        return everyone_has_act
     
+    # Si hubo apuestas...
     else:
-        # Verificar que todos los jugadores activos (excepto los all-in) hayan igualado la apuesta máxima
-        active_not_all_in = [p for p in active if p.last_action != ActionType.ALL_IN]
-        active_not_all_in_called = all(p.betting_stack == max_bet for p in active_not_all_in)
+        # Verificar que todos los jugadores activos que puedan hayan igualado
+        can_call_players = [p for p in active_players if p.total_stack >= max_bet]
+        can_call_called = all(p.betting_stack == max_bet for p in can_call_players)
+        
+        # Verificar que todos los jugadores activos que no lleguen a igualar hayan apostado todo
+        cannot_call_players = [p for p in active_players if p.total_stack < max_bet]
+        cannot_call_all_in = all(p.stack == 0 for p in cannot_call_players)
+        
+        # Todos los jugadores apostaron el máximo posible para igualar la apuesta
+        everyone_try_called = can_call_called and cannot_call_all_in
         
         # Continuar si todavía debe actuar el big blind en pre-flop
         if game_state.hand.street == HandStreet.PRE_FLOP:
             bbp = game_state.hand.big_blind_position
             big_blind_player = game_state.players_by_position[bbp]
             bb_last_action = big_blind_player.last_action
-            return active_not_all_in_called and bb_last_action != ActionType.PUT_BB
+            return everyone_try_called and bb_last_action != ActionType.PUT_BB
         
-        # Terminar si todos igualaron la apuesta máxima
-        return active_not_all_in_called
+        # Terminar si todos intentaron igualar la apuesta máxima
+        return everyone_try_called
