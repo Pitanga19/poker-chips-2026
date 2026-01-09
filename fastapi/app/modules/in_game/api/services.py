@@ -66,15 +66,18 @@ class GameService:
         Procesa la acción de un jugador en una mano específica.
         """
         game_state = GameRepository.get(game_id)
-        engine = GameEngine(game_state)
         acting_player_id = game_state.current_player.id
+        
+        # Verificar que sea el jugador que le toca actuar
+        if request.player_id != acting_player_id:
+            raise ValidationException('No es tu turno de actuar!')
+        
+        engine = GameEngine(game_state)
         prev_street = engine.state.hand.street
         next_available_actions = None
         
         status = engine.action(request.action, request.amount)
         GameRepository.save(engine.state)
-        
-        acting_player = engine.state.players_by_id[acting_player_id]
         
         if status == BetRoundResult.FINISHED:
             engine.handle_bet_round_finish()

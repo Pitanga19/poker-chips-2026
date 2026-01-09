@@ -90,6 +90,7 @@ class AvailableActionsResponse(BaseModel):
     )
 
 class PlayerActionRequest(BaseModel):
+    player_id: int = Field(..., description='ID del jugador que está realizando la acción')
     action: ActionType = Field(..., description='Tipo de acción que el jugador desea realizar')
     amount: Optional[int] = Field(None, description='Cantidad asociada a la acción, si aplica')
 
