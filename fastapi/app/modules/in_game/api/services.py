@@ -66,10 +66,14 @@ class GameService:
         Procesa la acción de un jugador en una mano específica.
         """
         game_state = GameRepository.get(game_id)
-        acting_player_id = game_state.current_player.id
+        current_player = game_state.current_player
+        
+        # Verificar que se espere un jugador que actúe
+        if current_player is None:
+            raise ValidationException('Nadie debe actuar todavía!')
         
         # Verificar que sea el jugador que le toca actuar
-        if request.player_id != acting_player_id:
+        if request.player_id != current_player.id:
             raise ValidationException('No es tu turno de actuar!')
         
         engine = GameEngine(game_state)
