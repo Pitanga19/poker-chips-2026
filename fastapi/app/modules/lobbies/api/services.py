@@ -119,7 +119,7 @@ class LobbyService:
         lobby = LobbyService._get_existing_lobby(lobby_id)
         game_start_request = LobbyMapper.lobby_to_game_start_request(lobby)
         
-        if len(lobby.settings.table_size) > 10:
+        if lobby.settings.table_size > 10:
             raise ValidationException(
                 'La cantidad de asientos en una mesa no puede ser mayor a 10.'
             )
