@@ -1,5 +1,4 @@
 from typing import Optional, List
-from app.core.exceptions import ValidationException
 from app.db.tables.hands.schemas import HandStreet
 from app.modules.sessions.engine.game_states import PlayerState, TurnState, HandState
 
@@ -39,24 +38,8 @@ def get_first_to_act_position(
         return None
     
     start_position = get_start_position_for_round(hand)
-    sorted_players = sorted(players, key=lambda p: p.position)
     
-    start_index = next(
-        (i for i, p in enumerate(sorted_players) if p.position == start_position),
-        None,
-    )
-    
-    if start_index is None:
-        raise ValidationException('Posición de inicio inválida')
-    
-    for p in (
-        sorted_players[start_index + 1 :]
-        + sorted_players[: start_index + 1]
-    ):
-        if p.can_act and p.last_action is None:
-            return p.position
-    
-    return None
+    return get_next_can_act_position(start_position, players)
 
 def get_can_act_positions(players: List[PlayerState]) -> List[int]:
     """
