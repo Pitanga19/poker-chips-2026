@@ -25,6 +25,11 @@ class GameService:
         """
         Inicia un nuevo juego con la configuración dada.
         """
+        if len(request.players) < 2:
+            raise ValidationException(
+                'Debe haber al menos 2 jugadores en la mesa para iniciar el juego.'
+            )
+        
         if request.table_size < len(request.players):
             raise ValidationException(
                 'No hay suficientes asientos en la mesa para todos los jugadores.'
