@@ -43,7 +43,7 @@ class LobbyService:
         
         if request.self_position not in range(1, request.table_size + 1):
             raise ValidationException(
-                'La posición del jugador debe estar entre 1 y la cantidad de asientos.'
+                f'La posición del jugador debe estar entre 1 y {request.table_size}.'
             )
         
         lobby = LobbyMapper.request_to_lobby_state(lobby_id, request)
