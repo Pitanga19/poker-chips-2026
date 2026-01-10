@@ -9,6 +9,7 @@ from app.modules.sessions.engine.managers.showdown_manager import (
 )
 from app.modules.sessions.api.schemas import (
     InGamePlayerInfo,
+    ShowAvailableActions,
     GameStartRequest,
     GameStartResponse,
     GameRenderResponse,
@@ -82,12 +83,14 @@ class GameMapper:
         )
     
     @staticmethod
-    def game_state_to_start_response(gs: GameState) -> GameStartResponse:
+    def game_state_to_start_response(
+        gs: GameState,
+        available_actions: ShowAvailableActions
+    ) -> GameStartResponse:
         # Implementación para mapear GameState a GameStartResponse
         dealer = gs.players_by_position[gs.hand.dealer_position]
         small_blind = gs.players_by_position[gs.hand.small_blind_position]
         big_blind = gs.players_by_position[gs.hand.big_blind_position]
-        current_player = gs.current_player
         pots = gs.pots
         
         return GameStartResponse(
@@ -97,7 +100,6 @@ class GameMapper:
             dealer_id=dealer.id,
             small_blind_id=small_blind.id,
             big_blind_id=big_blind.id,
-            current_player_id=current_player.id,
             players=[
                 GameMapper._player_state_to_player_info(player)
                 for player in gs.players
@@ -110,6 +112,7 @@ class GameMapper:
                 )
                 for i, pot in enumerate(pots)
             ],
+            available_actions=available_actions,
         )
     
     @staticmethod

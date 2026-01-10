@@ -6,6 +6,18 @@ from app.db.tables.hands.schemas import HandStreet
 from app.modules.sessions.engine.utils.enums import BetRoundResult
 
 # Esquemas Pydantic copiados de los dataclasses usados en la lógica del motor de juego
+class ToCreatePlayerInfo(BaseModel):
+    id: int = Field(..., description='ID del jugador')
+    username: str = Field(..., description='Nombre de usuario del jugador')
+    position: int = Field(..., description='Posición del jugador en la mesa')
+    stack: int = Field(..., description='Saldo del jugador')
+
+class InGamePlayerInfo(ToCreatePlayerInfo):
+    betting_stack: int = Field(
+        ..., description='Cantidad apostada en la mano actual por el jugador'
+    )
+    is_active: bool = Field(..., description='Indica si el jugador está activo en la mano')
+
 class ActionDescriptorView(BaseModel):
     type: ActionType = Field(..., description='Tipo de acción disponible')
     min_amount: Optional[int] = Field(
@@ -13,6 +25,12 @@ class ActionDescriptorView(BaseModel):
     )
     max_amount: Optional[int] = Field(
         None, description='Cantidad máxima para la acción, si aplica'
+    )
+
+class ShowAvailableActions(BaseModel):
+    player: InGamePlayerInfo = Field(..., description='Información del jugador actual')
+    actions: List[ActionDescriptorView] = Field(
+        ..., description='Lista de acciones disponibles para el jugador actual'
     )
 
 class PotInfoView(BaseModel):
@@ -27,18 +45,6 @@ class ShowdownPotWinnersView(BaseModel):
 class PayoutDescriptionView(BaseModel):
     player_id: int = Field(..., description='ID del jugador')
     amount_won: int = Field(..., description='Cantidad ganada por el jugador')
-
-class ToCreatePlayerInfo(BaseModel):
-    id: int = Field(..., description='ID del jugador')
-    username: str = Field(..., description='Nombre de usuario del jugador')
-    position: int = Field(..., description='Posición del jugador en la mesa')
-    stack: int = Field(..., description='Saldo del jugador')
-
-class InGamePlayerInfo(ToCreatePlayerInfo):
-    betting_stack: int = Field(
-        ..., description='Cantidad apostada en la mano actual por el jugador'
-    )
-    is_active: bool = Field(..., description='Indica si el jugador está activo en la mano')
 
 class LastActionView(BaseModel):
     player: InGamePlayerInfo = Field(..., description='Información del jugador que hizo la acción')
@@ -70,11 +76,13 @@ class GameStartResponse(BaseModel):
     dealer_id: int = Field(..., description='ID del jugador que es el dealer')
     small_blind_id: int = Field(..., description='ID del jugador que puso la ciega pequeña')
     big_blind_id: int = Field(..., description='ID del jugador que puso la ciega grande')
-    current_player_id: int = Field(..., description='ID del jugador actual')
     players: List[InGamePlayerInfo] = Field(
         ..., description='Información de los jugadores en la mano'
     )
     pots: List[PotInfoView] = Field(..., description='Pots actuales en la mano')
+    available_actions: ShowAvailableActions = Field(
+        ..., description='Acciones disponibles para el jugador actual'
+    )
 
 class GameRenderResponse(GameStartResponse):
     waiting_for_action: bool = Field(..., description='Indica si se está esperando una acción')
@@ -83,11 +91,8 @@ class GameRenderResponse(GameStartResponse):
         None, description='Última acción realizada en la mano'
     )
 
-class AvailableActionsResponse(BaseModel):
-    player: InGamePlayerInfo = Field(..., description='Información del jugador actual')
-    actions: List[ActionDescriptorView] = Field(
-        ..., description='Lista de acciones disponibles para el jugador actual'
-    )
+class AvailableActionsResponse(ShowAvailableActions):
+    pass
 
 class PlayerActionRequest(BaseModel):
     player_id: int = Field(..., description='ID del jugador que está realizando la acción')

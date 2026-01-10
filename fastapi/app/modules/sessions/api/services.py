@@ -37,7 +37,8 @@ class GameService:
         engine.start(dealer_position=request.dealer_position)
         GameRepository.save(engine.state)
         
-        return GameMapper.game_state_to_start_response(engine.state)
+        available_actions = GameService.available_actions(game_id)
+        return GameMapper.game_state_to_start_response(engine.state, available_actions)
     
     @staticmethod
     def get_game_state(game_id: UUID) -> GameRenderResponse:
