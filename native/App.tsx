@@ -1,11 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
+import React from 'react'
+import { NavigationContainer } from '@react-navigation/native'
+import { ThemeProvider } from './src/theme/ThemeProvider'
+import { GlobalStyle } from './src/theme/GlobalStyle'
+import AppNavigator from './src/navigation/AppNavigator'
 
 export default function App() {
   return (
-    <View>
-      <Text>Hola Poker!</Text>
-      <StatusBar style='auto' />
-    </View>
-  );
+    <ThemeProvider>
+      <GlobalStyle>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </GlobalStyle>
+    </ThemeProvider>
+  )
 }
