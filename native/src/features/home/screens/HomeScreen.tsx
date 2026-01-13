@@ -20,7 +20,7 @@ export default function HomeScreen({ navigation }: Props) {
             <ButtonText>Crear Juego</ButtonText>
           </PrimaryButton>
           
-          <PrimaryButton>
+          <PrimaryButton onPress={() => navigation.navigate('JoinGame')}>
             <ButtonText>Unirse a Juego</ButtonText>
           </PrimaryButton>
           
