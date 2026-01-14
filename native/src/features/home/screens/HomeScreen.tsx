@@ -1,8 +1,9 @@
 import React from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../../navigation/AppNavigator'
-import { Container, LogoContainer, LogoImage, Actions } from './HomeScreen.styles'
 import { ScreenLayout } from '../../../layout/ScreenLayout'
+import { LogoContainer, LogoImage } from '../../../ui/Logo'
+import { Container, Actions } from './HomeScreen.styles'
 import { PrimaryButton, ButtonText } from '../../../ui/Buttons'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>
