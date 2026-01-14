@@ -10,47 +10,56 @@ import { TextInput, InputLabel, InputError } from '../../../../ui/Inputs'
 import { PrimaryButton, SecondaryButton, ButtonText } from '../../../../ui/Buttons'
 import { Container, SecondaryButtonContainer } from '../AuthScreen.styles'
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Login'>
+type Props = NativeStackScreenProps<RootStackParamList, 'Register'>
 
-export default function LoginScreen({ navigation }: Props) {
-  const { login, isAuthenticated } = useAuth()
+export default function RegisterScreen({ navigation }: Props) {
+  const { register, isAuthenticated } = useAuth()
   const [username, setUsername] = useState<string>('')
   const [usernameError, setUsernameError] = useState<string | null>(null)
   const [password, setPassword] = useState<string>('')
   const [passwordError, setPasswordError] = useState<string | null>(null)
-  const [loginError, setLoginError] = useState<string | null>(null)
+  const [password_confirm, setPasswordConfirm] = useState<string>('')
+  const [passwordConfirmError, setPasswordConfirmError] = useState<string | null>(null)
+  const [registerError, setRegisterError] = useState<string | null>(null)
   
-  const handleSuccessLogin = () => {
+  const handleSuccessRegister = () => {
     navigation.navigate('Home')
   }
   
   const handleSubmit = async () => {
     setUsernameError(null)
     setPasswordError(null)
-    setLoginError(null)
+    setPasswordConfirmError(null)
+    setRegisterError(null)
     
     try {
-      await login({ username, password})
+      await register({ username, password, password_confirm })
     } catch {
-      setLoginError('Usuario o contraseña inválidos')
+      setRegisterError('Usuario o contraseña inválidos')
     }
   }
   
   useEffect(() => {
-    if (isAuthenticated) handleSuccessLogin()
+    if (isAuthenticated) handleSuccessRegister()
   }, [isAuthenticated])
   
+  const handleBack = () => navigation.goBack()
+  
   return (
-    <ScreenLayout>
+    <ScreenLayout
+      title={'Registrarse'}
+      showBack={true}
+      onBack={handleBack}
+    >
       <Container>
         <LogoContainer>
           <LogoImage source={require('../../../../assets/logo.png')} resizeMode='contain' />
         </LogoContainer>
         <Form>
           <InputContainer>
-            <InputLabel>Username</InputLabel>
+            <InputLabel>Usuario</InputLabel>
             <TextInput
-              placeholder='username'
+              placeholder='nombre de usuario'
               value={username}
               onChangeText={setUsername}
             />
@@ -58,27 +67,29 @@ export default function LoginScreen({ navigation }: Props) {
           </InputContainer>
           
           <InputContainer>
-            <InputLabel>Password</InputLabel>
+            <InputLabel>Contraseña</InputLabel>
             <TextInput
-              placeholder='password'
+              placeholder='contraseña'
               value={password}
               onChangeText={setPassword}
             />
             {passwordError && <InputError>{passwordError}</InputError>}
           </InputContainer>
           
+          <InputContainer>
+            <InputLabel>Confirmar contraseña</InputLabel>
+            <TextInput
+              placeholder='confirmar contraseña'
+              value={password_confirm}
+              onChangeText={setPasswordConfirm}
+            />
+            {passwordError && <InputError>{passwordConfirmError}</InputError>}
+          </InputContainer>
+          
           <SubmitContainer>
-            {loginError && <InputError>{loginError}</InputError>}
-            <SecondaryButtonContainer>
-              <SecondaryButton>
-                <ButtonText><Ionicons name='help-circle' size={16} /> Olvidé mi contraseña</ButtonText>
-              </SecondaryButton>
-              <SecondaryButton onPress={() => navigation.navigate('Register')}>
-                <ButtonText>Registrarme <Ionicons name='add-circle' size={16} /></ButtonText>
-              </SecondaryButton>
-            </SecondaryButtonContainer>
+            {registerError && <InputError>{registerError}</InputError>}
             <PrimaryButton onPress={() => handleSubmit()}>
-              <ButtonText>Login</ButtonText>
+              <ButtonText>Registrarme</ButtonText>
             </PrimaryButton>
           </SubmitContainer>
         </Form>
