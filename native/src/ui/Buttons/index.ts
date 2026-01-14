@@ -1,4 +1,5 @@
 export * from './PrimaryButton'
+export * from './SecondaryButton'
 export * from './DisabledButton'
 export * from './IconButton'
 export * from './ButtonText'
