@@ -33,7 +33,7 @@ async def get_me_endpoint(
     return await auth_services.get_current_user_service(current_user.id, db)
 
 # Cerrar sesión
-@router.post('/logout')
+@router.post('/logout', status_code=204)
 async def logout_endpoint(
     authorization: str = Header(..., description='Bearer token'),
 ):
@@ -41,4 +41,4 @@ async def logout_endpoint(
     Logout del usuario. Actualmente invalida sesión en el cliente.
     """
     token = authorization.replace('Bearer ', '')
-    return await auth_services.logout_user_service(token)
+    await auth_services.logout_user_service(token)

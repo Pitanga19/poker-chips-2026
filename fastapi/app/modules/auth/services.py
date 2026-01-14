@@ -87,7 +87,6 @@ async def get_current_user_service(user_id: int, db: AsyncSession) -> User:
     
     return user
 
-# Logout: opcionalmente podés implementar blacklist de JWT en el futuro
 async def logout_user_service(token: str) -> dict:
     """
     Logout de usuario. Actualmente solo devuelve mensaje.
@@ -99,5 +98,4 @@ async def logout_user_service(token: str) -> dict:
             detail='Token requerido para logout'
         )
     
-    # Por ahora no hacemos nada con el token, solo respondemos
-    return {'msg': 'Logout exitoso'}
+    # Sin retorno, sólo status 204
