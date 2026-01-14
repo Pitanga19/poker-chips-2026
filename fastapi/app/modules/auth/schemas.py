@@ -15,3 +15,7 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     id: Annotated[int, Field(..., gt=0)]
     username: Annotated[str, Field(..., min_length=3, max_length=30)]
+
+class AuthResponse(BaseModel):
+    token: Token
+    user: TokenData
