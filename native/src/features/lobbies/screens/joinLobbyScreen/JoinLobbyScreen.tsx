@@ -1,22 +1,18 @@
 import React from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../../../navigation/AppNavigator'
+import { RootStackParamList } from '../../../../navigation/AppStack'
 import { ScreenLayout } from '../../../../layout/ScreenLayout'
 import { Form, InputContainer, SubmitContainer } from '../../../../ui/Forms'
 import { TextInput, InputLabel, InputError } from '../../../../ui/Inputs'
 import { PrimaryButton, ButtonText } from '../../../../ui/Buttons'
 
-type Props = NativeStackScreenProps<RootStackParamList, 'JoinGame'>
+type Props = NativeStackScreenProps<RootStackParamList, 'JoinLobby'>
 
-export default function JoinGameScreen({ navigation }: Props) {
+export default function JoinLobbyScreen({ navigation }: Props) {
   const handleBack = () => navigation.goBack()
   
   return (
-    <ScreenLayout
-      title={'Unirse a Juego'}
-      showBack={true}
-      onBack={handleBack}
-    >
+    <ScreenLayout title={'Unirse a Juego'} showBack={true} onBack={handleBack}>
       <Form>
         <InputContainer>
           <InputLabel>Código del Juego</InputLabel>

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../../../navigation/AppNavigator'
+import { RootStackParamList } from '../../../../navigation/AuthStack'
 import { ScreenLayout } from '../../../../layout/ScreenLayout'
 import { LogoContainer, LogoImage } from '../../../../ui/Logo'
 import { Form, InputContainer, SubmitContainer } from '../../../../ui/Forms'
@@ -12,7 +12,7 @@ import { Container } from '../AuthScreen.styles'
 type Props = NativeStackScreenProps<RootStackParamList, 'Register'>
 
 export default function RegisterScreen({ navigation }: Props) {
-  const { register, isAuthenticated } = useAuth()
+  const { register } = useAuth()
   const [username, setUsername] = useState<string>('')
   const [usernameError, setUsernameError] = useState<string | null>(null)
   const [password, setPassword] = useState<string>('')
@@ -21,16 +21,9 @@ export default function RegisterScreen({ navigation }: Props) {
   const [passwordConfirmError, setPasswordConfirmError] = useState<string | null>(null)
   const [registerError, setRegisterError] = useState<string | null>(null)
   
-  const handleSuccessRegister = () => {
-    navigation.navigate('Home')
-  }
+  const handleBack = () => navigation.goBack()
   
   const handleSubmit = async () => {
-    setUsernameError(null)
-    setPasswordError(null)
-    setPasswordConfirmError(null)
-    setRegisterError(null)
-    
     try {
       await register({ username, password, password_confirm })
     } catch {
@@ -38,21 +31,14 @@ export default function RegisterScreen({ navigation }: Props) {
     }
   }
   
-  useEffect(() => {
-    if (isAuthenticated) handleSuccessRegister()
-  }, [isAuthenticated])
-  
-  const handleBack = () => navigation.goBack()
-  
   return (
-    <ScreenLayout
-      title={'Registrarse'}
-      showBack={true}
-      onBack={handleBack}
-    >
+    <ScreenLayout title={'Registrarse'} showBack={true} onBack={handleBack}>
       <Container>
         <LogoContainer>
-          <LogoImage source={require('../../../../assets/logo.png')} resizeMode='contain' />
+          <LogoImage
+            source={require('../../../../assets/logo.png')}
+            resizeMode='contain'
+          />
         </LogoContainer>
         <Form>
           <InputContainer>
@@ -71,7 +57,7 @@ export default function RegisterScreen({ navigation }: Props) {
               placeholder='contraseña'
               value={password}
               onChangeText={setPassword}
-            />
+              />
             {passwordError && <InputError>{passwordError}</InputError>}
           </InputContainer>
           

@@ -1,22 +1,18 @@
 import React from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../../../navigation/AppNavigator'
+import { RootStackParamList } from '../../../../navigation/AppStack'
 import { ScreenLayout } from '../../../../layout/ScreenLayout'
 import { Form, InputContainer, SubmitContainer } from '../../../../ui/Forms'
 import { TextInput, InputLabel, InputError } from '../../../../ui/Inputs'
 import { PrimaryButton, ButtonText } from '../../../../ui/Buttons'
 
-type Props = NativeStackScreenProps<RootStackParamList, 'CreateGame'>
+type Props = NativeStackScreenProps<RootStackParamList, 'CreateLobby'>
 
-export default function CreateGameScreen({ navigation }: Props) {
+export default function CreateLobbyScreen({ navigation }: Props) {
   const handleBack = () => navigation.goBack()
   
   return (
-    <ScreenLayout
-      title={'Crear Juego'}
-      showBack={true}
-      onBack={handleBack}
-    >
+    <ScreenLayout title={'Crear Juego'} showBack={true} onBack={handleBack}>
       <Form>
         <InputContainer>
           <InputLabel>Tamaño de la mesa</InputLabel>
