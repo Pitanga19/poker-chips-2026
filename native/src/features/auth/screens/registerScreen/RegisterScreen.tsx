@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { Ionicons } from '@expo/vector-icons'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../../../navigation/AppNavigator'
 import { ScreenLayout } from '../../../../layout/ScreenLayout'
 import { LogoContainer, LogoImage } from '../../../../ui/Logo'
 import { Form, InputContainer, SubmitContainer } from '../../../../ui/Forms'
 import { TextInput, InputLabel, InputError } from '../../../../ui/Inputs'
-import { PrimaryButton, SecondaryButton, ButtonText } from '../../../../ui/Buttons'
-import { Container, SecondaryButtonContainer } from '../AuthScreen.styles'
+import { PrimaryButton, ButtonText } from '../../../../ui/Buttons'
+import { Container } from '../AuthScreen.styles'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Register'>
 
