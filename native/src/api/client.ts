@@ -2,7 +2,7 @@ import axios from 'axios'
 import { authStorage } from '../features/auth/storage/auth.storage'
 
 export const api = axios.create({
-  baseURL: 'http://192.168.0.30:8000',
+  baseURL: process.env.EXPO_PUBLIC_API_URL,
   timeout: 10000,
 })
 
