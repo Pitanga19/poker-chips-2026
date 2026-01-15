@@ -10,7 +10,7 @@ export const useAuth = () => {
   const register = async (payload: AuthRegisterData): Promise<AuthResponse> => {
     const response = await registerUser(payload)
     
-    authStorage.setToken(response.token.access_token)
+    await authStorage.setToken(response.token.access_token)
     
     dispatch({ type: AuthActionType.REGISTER, payload: response })
     return response
@@ -19,14 +19,14 @@ export const useAuth = () => {
   const login = async (payload: AuthLoginData): Promise<AuthResponse> => {
     const response = await loginUser(payload)
     
-    authStorage.setToken(response.token.access_token)
+    await authStorage.setToken(response.token.access_token)
     
     dispatch({ type: AuthActionType.LOGIN, payload: response })
     return response
   }
   
   const hydrate = async (): Promise<void> => {
-    const storage_token = authStorage.getToken()
+    const storage_token = await authStorage.getToken()
     if (!storage_token) return
     
     try {
@@ -41,14 +41,14 @@ export const useAuth = () => {
         payload: { token, user }
       })
     } catch {
-      authStorage.clearToken()
+      await authStorage.clearToken()
       dispatch({ type: AuthActionType.LOGOUT })
     }
   }
   
   const logout = async (): Promise<void> => {
     await logoutUser()
-    authStorage.clearToken()
+    await authStorage.clearToken()
     dispatch({ type: AuthActionType.LOGOUT })
   }
   

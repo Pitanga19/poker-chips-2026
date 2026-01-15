@@ -6,12 +6,17 @@ export const api = axios.create({
   timeout: 10000,
 })
 
-api.interceptors.request.use((config) => {
-  const token = authStorage.getToken()
-  
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+api.interceptors.request.use(
+  async (config) => {
+    const token = await authStorage.getToken()
+    
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
   }
-  
-  return config
-})
+)
