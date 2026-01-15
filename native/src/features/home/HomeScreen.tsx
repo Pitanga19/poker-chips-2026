@@ -34,7 +34,7 @@ export default function HomeScreen({ navigation }: Props) {
             <ButtonText>Unirse a Juego</ButtonText>
           </PrimaryButton>
           
-          <PrimaryButton>
+          <PrimaryButton onPress={() => navigation.navigate('Profile')}>
             <ButtonText>Perfil</ButtonText>
           </PrimaryButton>
           
