@@ -42,7 +42,7 @@ export default function RegisterScreen({ navigation }: Props) {
         </LogoContainer>
         <Form>
           <InputContainer>
-            <InputLabel>Usuario</InputLabel>
+            <InputLabel>Nombre de Usuario</InputLabel>
             <TextInput
               placeholder='nombre de usuario'
               value={username}
@@ -57,6 +57,10 @@ export default function RegisterScreen({ navigation }: Props) {
               placeholder='contraseña'
               value={password}
               onChangeText={setPassword}
+              secureTextEntry
+              autoCapitalize='none'
+              autoCorrect={false}
+              textContentType='password'
               />
             {passwordError && <InputError>{passwordError}</InputError>}
           </InputContainer>
@@ -67,6 +71,10 @@ export default function RegisterScreen({ navigation }: Props) {
               placeholder='confirmar contraseña'
               value={password_confirm}
               onChangeText={setPasswordConfirm}
+              secureTextEntry
+              autoCapitalize='none'
+              autoCorrect={false}
+              textContentType='password'
             />
             {passwordError && <InputError>{passwordConfirmError}</InputError>}
           </InputContainer>

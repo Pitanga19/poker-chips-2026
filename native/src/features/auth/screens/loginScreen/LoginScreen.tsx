@@ -7,11 +7,7 @@ import { ScreenLayout } from '../../../../layout/ScreenLayout'
 import { LogoContainer, LogoImage } from '../../../../ui/Logo'
 import { Form, InputContainer, SubmitContainer } from '../../../../ui/Forms'
 import { TextInput, InputLabel, InputError } from '../../../../ui/Inputs'
-import {
-  PrimaryButton,
-  SecondaryButton,
-  ButtonText,
-} from '../../../../ui/Buttons'
+import { PrimaryButton, SecondaryButton, ButtonText } from '../../../../ui/Buttons'
 import { Container, SecondaryButtonContainer } from '../AuthScreen.styles'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>
@@ -23,7 +19,7 @@ export default function LoginScreen({ navigation }: Props) {
   const [password, setPassword] = useState<string>('')
   const [passwordError, setPasswordError] = useState<string | null>(null)
   const [loginError, setLoginError] = useState<string | null>(null)
-
+  
   const handleSubmit = async () => {
     try {
       await login({ username, password })
@@ -43,9 +39,9 @@ export default function LoginScreen({ navigation }: Props) {
         </LogoContainer>
         <Form>
           <InputContainer>
-            <InputLabel>Username</InputLabel>
+            <InputLabel>Nombre de Usuario</InputLabel>
             <TextInput
-              placeholder='username'
+              placeholder='nombre de usuario'
               value={username}
               onChangeText={setUsername}
             />
@@ -53,11 +49,15 @@ export default function LoginScreen({ navigation }: Props) {
           </InputContainer>
           
           <InputContainer>
-            <InputLabel>Password</InputLabel>
+            <InputLabel>Contraseña</InputLabel>
             <TextInput
-              placeholder='password'
+              placeholder='contraseña'
               value={password}
               onChangeText={setPassword}
+              secureTextEntry
+              autoCapitalize='none'
+              autoCorrect={false}
+              textContentType='password'
               />
             {passwordError && <InputError>{passwordError}</InputError>}
           </InputContainer>
@@ -77,7 +77,7 @@ export default function LoginScreen({ navigation }: Props) {
               </SecondaryButton>
             </SecondaryButtonContainer>
             <PrimaryButton onPress={() => handleSubmit()}>
-              <ButtonText>Login</ButtonText>
+              <ButtonText>Iniciar Sesión</ButtonText>
             </PrimaryButton>
           </SubmitContainer>
         </Form>
